@@ -1,0 +1,66 @@
+$span: (8px, 16px 24px);
+
+@each $v in $span {
+  // margin class
+  .m-t {
+    margin-top: $v;
+  }
+  .m-b {
+    margin-bottom: $v;
+  }
+  .m-l {
+    margin-left: $v;
+  }
+  .m-r {
+    margin-right: $v;
+  }
+  .m-x {
+    margin-left: $v;
+    margin-right: $v;
+  }
+  .m-y {
+    margin-top: $v;
+    margin-bottom: $v;
+  }
+  
+  // padding class
+  .p-t {
+    padding-top: $v;
+  }
+  .p-b {
+    padding-bottom: $v;
+  }
+  .p-l {
+    padding-left: $v;
+  }
+  .p-r {
+    padding-right: $v;
+  }
+  .p-x {
+    padding-left: $v;
+    padding-right: $v;
+  }
+  .p-y {
+    padding-top: $v;
+    padding-bottom: $v;
+  }
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.flex-x-center {
+  display: flex;
+  justify-content: center;
+  
+}
+.flex-y-center {
+  display: flex;
+  align-items: center;
+}
+.flex-x-end {
+  display: flex;
+  justify-content: flex-end;
+}
