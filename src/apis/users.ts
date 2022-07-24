@@ -1,5 +1,5 @@
-import { get, post } from '../utils/request';
-import { IUsersItem, IUsersRequestParams, ICreateUserParams } from '../types/users';
+import { get, patch, post, delet } from '../utils/request';
+import { IUsersItem, IUsersRequestParams, ICreateUserParams, IUpdateUserParams } from '../types/users';
 import { IPaginationResponse } from '../types/request';
 import { useState } from 'react';
 
@@ -41,4 +41,12 @@ export function useGetUsers() {
 
 export function createUser(params: ICreateUserParams) {
   return post<IUsersItem>('/api/users', params);
+}
+
+export function updateUser(id: number, params: IUpdateUserParams) {
+  return patch<IUsersItem>('/api/users/' + id, params);
+}
+
+export function removeUser(id: number) {
+  return delet('/api/users/' + id);
 }

@@ -1,7 +1,7 @@
-import { Button, Form, Input, Radio, Space, Table } from 'antd';
+import { Button, Form, Input, message, Radio, Space, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { useGetUsers } from '../../apis/users';
-import { EUserStatus } from '../../types/users';
+import { removeUser, updateUser, useGetUsers } from '../../apis/users';
+import { EUserStatus, IUsersItem } from '../../types/users';
 import { statusLabel } from './constants';
 import CreateUser from './create';
 
@@ -20,11 +20,11 @@ function UserListPage() {
       return statusLabel[val];
     } },
     { title:'创建时间', dataIndex: 'createTime', key: 'createTime' },
-    { title: '操作', key: 'action', render: function () {
+    { title: '操作', key: 'action', render: function (text: string, record: IUsersItem) {
       return (
         <Space size="middle">
-          <a>启用</a>
-          <a>删除</a>
+          <a href="javascript: void(0);" onClick={() => changeUserStatus(record.id, record.status)}>{statusLabel[getDstatus(record.status)]}</a>
+          <a onClick={() => removeUserHandler(record.id)}>删除</a>
           <a>修改信息</a>
         </Space>
       )
@@ -55,6 +55,36 @@ function UserListPage() {
   function afterCreatedUser() {
     setShowCreateModal(false)
     searchUsers()
+  }
+  async function changeUserStatus(id: number, status: EUserStatus) {
+    const wantStatus = getDstatus(status);
+    try {
+      await updateUser(id, { status: wantStatus });
+      message.success('操作成功');
+      await requestUsers({
+        ...form.getFieldsValue(true),
+        page: pagination.page,
+        pageSize: pagination.pageSize
+      })
+    }
+    catch (err) {}
+  }
+  async function removeUserHandler(id: number) {
+    try {
+      await removeUser(id);
+      message.success('操作成功');
+      await requestUsers({
+        ...form.getFieldsValue(true),
+        page: pagination.page,
+        pageSize: pagination.pageSize
+      })
+    }
+    catch(err) {
+
+    }
+  }
+  function getDstatus(status: EUserStatus) {
+    return status === EUserStatus.disabled ? EUserStatus.enabled : EUserStatus.disabled;
   }
   return (
     <>

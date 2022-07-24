@@ -31,3 +31,5 @@ export interface ICreateUserParams {
   email: string;
   status: EUserStatus;
 }
+
+export type IUpdateUserParams = Partial<Pick<IUsersItem, 'email' | 'password' | 'status' | 'username'>>;
