@@ -27,6 +27,7 @@ export interface ICreateUserParams {
   username: string;
   account: string;
   password: string;
+  confirmPassword: string;
   email: string;
   status: EUserStatus;
 }

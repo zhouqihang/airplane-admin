@@ -6,7 +6,7 @@ import { statusLabel } from './constants';
 import CreateUser from './create';
 
 function UserListPage() {
-  const { users, total, loading, requestUsers } = useGetUsers();
+  const { users, loading, pagination, requestUsers } = useGetUsers();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [form] = Form.useForm();
   const initFormValue = {
@@ -34,12 +34,27 @@ function UserListPage() {
     const search = form.getFieldsValue(true);
     searchUsers(search);
   }, []);
-  function searchUsers(value: any) {
+  const tablePagination = Object.assign({
+    onChange: function (page: number, pageSize: number) {
+      requestUsers({
+        ...form.getFieldsValue(true),
+        page,
+        pageSize
+      })
+    },
+    current: pagination.page,
+  }, pagination);
+
+  function searchUsers(value: any = form.getFieldsValue(true)) {
     requestUsers({
       ...value,
       page: 1,
       pageSize: 20
     })
+  }
+  function afterCreatedUser() {
+    setShowCreateModal(false)
+    searchUsers()
   }
   return (
     <>
@@ -72,8 +87,8 @@ function UserListPage() {
           onClick={() => setShowCreateModal(true)}
         >新建账号</Button>
       </div>
-      <Table columns={tableColumns} dataSource={users} loading={loading} rowKey="id"></Table>
-      <CreateUser visible={showCreateModal} onClose={() => setShowCreateModal(false)}/>
+      <Table columns={tableColumns} dataSource={users} loading={loading} rowKey="id" pagination={tablePagination}></Table>
+      <CreateUser visible={showCreateModal} onClose={afterCreatedUser}/>
     </>
   )
 }

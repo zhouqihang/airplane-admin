@@ -15,15 +15,18 @@ export function useGetUsers() {
     pageSize: 20,
     total: 0
   });
-  const [total, setTotal] = useState<number>();
 
   async function requestUsers(params: IUsersRequestParams) {
     setLoading(true);
     try {
       const res = await getUsers(params);
       const { total, list } = res.data;
-      setTotal(total);
       setUsers(list);
+      setPagination({
+        page: res.data.page,
+        pageSize: res.data.pageSize,
+        total: total
+      })
     }
     catch(err) {
       // nothing
@@ -33,7 +36,7 @@ export function useGetUsers() {
     }
   }
 
-  return { users, pagination, total, loading, requestUsers };
+  return { users, pagination, loading, requestUsers };
 }
 
 export function createUser(params: ICreateUserParams) {
