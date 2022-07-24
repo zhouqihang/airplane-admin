@@ -61,3 +61,24 @@ export function get<T>(url: string, params: any = {}, config: IAxiosRequestConfi
   })
     .then(res => res.data);
 }
+
+/**
+ * patch
+ * patch 请求默认会显示 message 提示
+ * @param url 
+ * @param params 
+ * @param config 
+ * @returns 
+ */
+export function patch<T>(url: string, params: any = {}, config?: IAxiosRequestConfig) {
+  return instance.patch<IResponse<T>>(url, params, {showErrMsg: true, ...config})
+    .then(res => res.data);
+}
+
+export function delet<T>(url: string, params: any = {}, config: IAxiosRequestConfig = {}) {
+  return instance.delete<IResponse<T>>(url, {
+    ...config,
+    params: params
+  })
+    .then(res => res.data);
+}
