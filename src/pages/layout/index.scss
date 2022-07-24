@@ -3,4 +3,8 @@
   .air-content {
     padding: 16px;
   }
+  &__header {
+    display: flex;
+    justify-content: space-between;
+  }
 }

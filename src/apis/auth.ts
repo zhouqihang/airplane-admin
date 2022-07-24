@@ -7,3 +7,10 @@ export function login(params: ILoginParams) {
     password: params.pwd
   })
 }
+
+export function logout() {
+  return post('/api/logout')
+    .then(() => {
+      window.location.href = '/login';
+    })
+}

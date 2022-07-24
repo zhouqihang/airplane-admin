@@ -1,7 +1,7 @@
 import { get, patch, post, delet } from '../utils/request';
 import { IUsersItem, IUsersRequestParams, ICreateUserParams, IUpdateUserParams } from '../types/users';
 import { IPaginationResponse } from '../types/request';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export function getUsers(params: IUsersRequestParams) {
   return get<IPaginationResponse<IUsersItem>>('/api/users', params);
@@ -49,4 +49,19 @@ export function updateUser(id: number, params: IUpdateUserParams) {
 
 export function removeUser(id: number) {
   return delet('/api/users/' + id);
+}
+
+export function getCurrentUserInfo() {
+  return get<IUsersItem>('/api/users/self');
+}
+
+export function useCurrentUser() {
+  const [user, setUser] = useState<IUsersItem | undefined>(undefined);
+  useEffect(function () {
+    getCurrentUserInfo().then(res => {
+      setUser(res.data);
+    })
+  }, []);
+
+  return user;
 }
