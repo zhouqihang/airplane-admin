@@ -9,6 +9,7 @@ function UserListPage() {
   const { users, loading, pagination, requestUsers } = useGetUsers();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [form] = Form.useForm();
+  const [editId, setEditId] = useState<number | undefined>(undefined);
   const initFormValue = {
     status: ''
   }
@@ -23,9 +24,9 @@ function UserListPage() {
     { title: '操作', key: 'action', render: function (text: string, record: IUsersItem) {
       return (
         <Space size="middle">
-          <a href="javascript: void(0);" onClick={() => changeUserStatus(record.id, record.status)}>{statusLabel[getDstatus(record.status)]}</a>
+          <a onClick={() => changeUserStatus(record.id, record.status)}>{statusLabel[getDstatus(record.status)]}</a>
           <a onClick={() => removeUserHandler(record.id)}>删除</a>
-          <a>修改信息</a>
+          <a onClick={() => editUser(record.id)}>修改信息</a>
         </Space>
       )
     } }
@@ -54,6 +55,7 @@ function UserListPage() {
   }
   function afterCreatedUser() {
     setShowCreateModal(false)
+    setEditId(undefined);
     searchUsers()
   }
   async function changeUserStatus(id: number, status: EUserStatus) {
@@ -85,6 +87,10 @@ function UserListPage() {
   }
   function getDstatus(status: EUserStatus) {
     return status === EUserStatus.disabled ? EUserStatus.enabled : EUserStatus.disabled;
+  }
+  function editUser(id: number) {
+    setEditId(id);
+    setShowCreateModal(true);
   }
   return (
     <>
@@ -118,7 +124,7 @@ function UserListPage() {
         >新建账号</Button>
       </div>
       <Table columns={tableColumns} dataSource={users} loading={loading} rowKey="id" pagination={tablePagination}></Table>
-      <CreateUser visible={showCreateModal} onClose={afterCreatedUser}/>
+      <CreateUser visible={showCreateModal} editId={editId} onClose={afterCreatedUser}/>
     </>
   )
 }

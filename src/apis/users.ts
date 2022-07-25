@@ -65,3 +65,28 @@ export function useCurrentUser() {
 
   return user;
 }
+
+export function getUser(id: number) {
+  return get<IUsersItem>('/api/users/' + id);
+}
+
+export function useGetUser() {
+  const [user, setUser] = useState<IUsersItem>();
+  const [loading, setLoading] = useState<boolean>(false);
+  async function requestUser(id: number) {
+    try {
+      setLoading(true);
+      const res = await getUser(id);
+      setUser(res.data);
+    }
+    catch(err) {}
+    finally {
+      setLoading(false);
+    }
+  }
+  return {
+    user,
+    loading,
+    requestUser
+  }
+}

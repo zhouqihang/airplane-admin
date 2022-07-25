@@ -1,10 +1,11 @@
-import { Form, Input, message, Modal, Radio } from 'antd';
-import React, { useState } from 'react';
-import { createUser } from '../../apis/users';
+import { Form, Input, message, Modal, Radio, Spin } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { createUser, updateUser, useGetUser } from '../../apis/users';
 import { EUserStatus } from '../../types/users';
 
 interface ICreateUserProps {
   visible?: boolean;
+  editId?: number;
   onClose: () => void;
 }
 
@@ -42,12 +43,32 @@ function CreateUser(props: ICreateUserProps) {
     status: EUserStatus.enabled
   }
   const [loading, setLoading] = useState(false);
+  const { user, loading: editLoading, requestUser } = useGetUser();
+  const isEdit = !!props.editId;
+
+  useEffect(function () {
+    if (props.editId) {
+      requestUser(props.editId);
+    }
+  }, [props.editId])
+  useEffect(function () {
+    form.setFieldsValue({
+      username: user?.username,
+      email: user?.email,
+      status: user?.status
+    })
+  }, [user])
   async function submitHandler() {
     setLoading(true);
     try {
-      await form.validateFields();
+      await form.validateFields(isEdit ? ['username', 'email', 'status'] : undefined);
       const value = form.getFieldsValue(true);
-      await createUser(value);
+      if (isEdit) {
+        await updateUser(props.editId as number, value);
+      }
+      else {
+        await createUser(value);
+      }
       message.success('操作成功');
       onClose();
       form.resetFields()
@@ -63,25 +84,26 @@ function CreateUser(props: ICreateUserProps) {
     <Modal
       title="新建账户"
       visible={visible}
-      okText="创建"
+      okText={isEdit ? '修改' : '创建'}
       cancelText="取消"
       onOk={submitHandler}
       onCancel={onClose}
       confirmLoading={loading}
     >
+      <Spin spinning={editLoading}>
       <Form form={form} initialValues={initFormValue} labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
         <Form.Item label="用户名" name="username" rules={formRules.username}>
           <Input />
         </Form.Item>
-        <Form.Item label="账号" name="account" rules={formRules.account}>
+        {!isEdit && <Form.Item label="账号" name="account" rules={formRules.account}>
           <Input />
-        </Form.Item>
-        <Form.Item label="密码" name="password" rules={formRules.password}>
+        </Form.Item>}
+        {!isEdit && <Form.Item label="密码" name="password" rules={formRules.password}>
           <Input.Password />
-        </Form.Item>
-        <Form.Item label="确认密码" name="confirmPassword" rules={formRules.confirmPassword}>
+        </Form.Item>}
+        {!isEdit && <Form.Item label="确认密码" name="confirmPassword" rules={formRules.confirmPassword}>
           <Input.Password />
-        </Form.Item>
+        </Form.Item>}
         <Form.Item label="邮箱地址" name="email" rules={formRules.email}>
           <Input />
         </Form.Item>
@@ -92,6 +114,7 @@ function CreateUser(props: ICreateUserProps) {
           </Radio.Group>
         </Form.Item>
       </Form>
+      </Spin>
     </Modal>
   )
 }
