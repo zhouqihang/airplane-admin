@@ -1,7 +1,8 @@
-import React from 'react';
-import { Button, Form, Input, Radio, Space, Table } from 'antd';
+import React, { useEffect } from 'react';
+import { Button, Form, Input, message, Radio, Space, Table } from 'antd';
 import { EProjectStatus, IProjectItem } from '../../types/projects';
 import { statusLabel } from './constants';
+import { removeProject, updateProject, useGetProjectsCreatedByCurrent } from '../../apis/projects';
 
 function ProjectsPage() {
   const tableColumns = [
@@ -16,24 +17,65 @@ function ProjectsPage() {
       render: function (text: string, record: IProjectItem) {
         return (
           <Space size="middle">
-            <a href="javascript: void(0);">{statusLabel[getDstatus(record.status)]}</a>
-            <a>删除</a>
+            <a onClick={() => toggleStatus(record.id, record.status)}>{statusLabel[getDstatus(record.status)]}</a>
+            <a onClick={() => removeHandler(record.id)}>删除</a>
             <a>修改信息</a>
           </Space>
         )
       }
     }
   ];
+  const [form] = Form.useForm();
+  const { projects, pagination, loading, requestProjects } = useGetProjectsCreatedByCurrent();
+  const paginationProp = {
+    current: pagination.page,
+    pageSize: pagination.pageSize,
+    total: pagination.total,
+    onChange: onPageChange
+  }
+  useEffect(function () {
+    searchHandler();
+  }, []);
+  function searchHandler(val = form.getFieldsValue(true)) {
+    requestProjects({
+      ...val,
+      page: 1,
+      pageSize: 20
+    })
+  }
+  function onPageChange(page: number, pageSize: number) {
+    requestProjects({
+      ...form.getFieldsValue(true),
+      page,
+      pageSize
+    })
+  }
   function getDstatus(status: EProjectStatus) {
     return status === EProjectStatus.disabled ? EProjectStatus.enabled : EProjectStatus.disabled;
   }
+  async function removeHandler(id: number) {
+    try {
+      await removeProject(id);
+      message.success('操作成功');
+      searchHandler();
+    }
+    catch (err) {}
+  }
+  async function toggleStatus(id: number, status: EProjectStatus) {
+    try {
+      await updateProject(id, { status: getDstatus(status) });
+      message.success('操作成功');
+      searchHandler();
+    }
+    catch (err) {}
+  }
   return (
     <>
-    <Form layout="inline">
-      <Form.Item label="项目名称">
+    <Form layout="inline" form={form} onFinish={searchHandler}>
+      <Form.Item label="项目名称" name="name">
         <Input />
       </Form.Item>
-      <Form.Item>
+      <Form.Item name="status">
         <Radio.Group>
           <Radio value="">全部</Radio>
           <Radio value={EProjectStatus.enabled}>{statusLabel[EProjectStatus.enabled]}</Radio>
@@ -44,13 +86,13 @@ function ProjectsPage() {
         <Button type="default" htmlType="reset">重置</Button>
       </Form.Item>
       <Form.Item>
-        <Button type="primary" htmlType="button">查找</Button>
+        <Button type="primary" htmlType="submit">查找</Button>
       </Form.Item>
     </Form>
     <div className="flex-x-end m-y">
       <Button type="default" htmlType="button">新建项目</Button>
     </div>
-    <Table rowKey="id" columns={tableColumns} />
+    <Table rowKey="id" columns={tableColumns} dataSource={projects} pagination={paginationProp} loading={loading} />
     </>
   )
 }

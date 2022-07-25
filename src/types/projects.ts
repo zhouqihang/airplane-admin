@@ -14,4 +14,6 @@ export interface IProjectItem {
   updateTime: string;
 }
 
+export type IUpdateParams = Partial<Pick<IProjectItem, 'name' | 'desc' | 'status'>>;
+
 export type IGetProjectsCreatedByCurrentParams = IPagination & Partial<Pick<IProjectItem, 'name' | 'desc' | 'status'>>
