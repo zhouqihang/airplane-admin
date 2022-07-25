@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './pages/layout';
 import Login from './pages/login';
 import Users from './pages/users/list';
+import Projects from './pages/projects/list';
 import 'antd/dist/antd.css';
 import './assets/styles/common.scss';
 
@@ -12,6 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="users" element={<Users />} />
+          <Route path="projects" element={<Projects />} />
         </Route>
         <Route path="/login" element={<Login />} />
       </Routes>

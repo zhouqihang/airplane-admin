@@ -9,6 +9,10 @@ const menuItems: ItemType[] = [
   {
     label: '用户管理',
     key: '/users',
+  },
+  {
+    label: '项目管理',
+    key: '/projects'
   }
 ]
 

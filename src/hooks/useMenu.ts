@@ -7,7 +7,13 @@ export function useMenu() {
     if (selectedKeys.includes(key)) {
       return;
     }
-    setSelectedKeys(([] as string[]).concat(...selectedKeys, key))
+    const last = selectedKeys[selectedKeys.length];
+    if (last) {
+      if (key.startsWith(last)) {
+        setSelectedKeys(([] as string[]).concat(...selectedKeys, key));
+      }
+    }
+    setSelectedKeys([key]);
   }
   return {
     selectedKeys,
