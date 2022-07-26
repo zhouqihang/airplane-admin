@@ -1,8 +1,8 @@
 import { message } from "antd";
 import { useState } from "react";
-import { IGetProjectsCreatedByCurrentParams, IProjectItem, IUpdateParams } from "../types/projects";
+import { ICreateParams, IGetProjectsCreatedByCurrentParams, IProjectItem, IUpdateParams } from "../types/projects";
 import { IPaginationResponse } from "../types/request";
-import { delet, get, patch } from "../utils/request";
+import { delet, get, patch, post } from "../utils/request";
 
 export function getProjectsCreatedByCurrent(params: IGetProjectsCreatedByCurrentParams) {
   return get<IPaginationResponse<IProjectItem>>('/api/projects', params);
@@ -51,4 +51,33 @@ export function removeProject(id: number) {
 
 export function updateProject(id: number, params: IUpdateParams) {
   return patch<IProjectItem>('/api/projects/' + id, params);
+}
+
+export function createProject(params: ICreateParams) {
+  return post<IProjectItem>('/api/projects', params);
+}
+
+export function getProject(id: number) {
+  return get<IProjectItem>('/api/projects/' + id);
+}
+
+export function useGetProject() {
+  const [loading, setLoading] = useState(false);
+  const [project, setProject] = useState<IProjectItem>()
+  async function requestProject(id: number) {
+    try {
+      setLoading(true);
+      const res = await getProject(id);
+      setProject(res.data);
+    }
+    catch(err){}
+    finally {
+      setLoading(false);
+    }
+  }
+  return {
+    loading,
+    project,
+    requestProject
+  }
 }

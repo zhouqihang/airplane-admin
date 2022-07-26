@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, message, Radio, Space, Table } from 'antd';
 import { EProjectStatus, IProjectItem } from '../../types/projects';
 import { statusLabel } from './constants';
 import { removeProject, updateProject, useGetProjectsCreatedByCurrent } from '../../apis/projects';
+import CreateModal from './create';
 
 function ProjectsPage() {
   const tableColumns = [
@@ -19,7 +20,7 @@ function ProjectsPage() {
           <Space size="middle">
             <a onClick={() => toggleStatus(record.id, record.status)}>{statusLabel[getDstatus(record.status)]}</a>
             <a onClick={() => removeHandler(record.id)}>删除</a>
-            <a>修改信息</a>
+            <a onClick={() => openEditModal(record.id)}>修改信息</a>
           </Space>
         )
       }
@@ -33,6 +34,9 @@ function ProjectsPage() {
     total: pagination.total,
     onChange: onPageChange
   }
+  const [modalVisible, setModalVisible] = useState(false);
+  const [editId, setEditId] = useState<number>();
+
   useEffect(function () {
     searchHandler();
   }, []);
@@ -69,6 +73,15 @@ function ProjectsPage() {
     }
     catch (err) {}
   }
+  function openEditModal(id: number) {
+    setEditId(id);
+    setModalVisible(true);
+  }
+  function afterCreate() {
+    setModalVisible(false)
+    setEditId(undefined);
+    searchHandler();
+  }
   return (
     <>
     <Form layout="inline" form={form} onFinish={searchHandler}>
@@ -90,9 +103,10 @@ function ProjectsPage() {
       </Form.Item>
     </Form>
     <div className="flex-x-end m-y">
-      <Button type="default" htmlType="button">新建项目</Button>
+      <Button type="default" htmlType="button" onClick={() => setModalVisible(true)}>新建项目</Button>
     </div>
     <Table rowKey="id" columns={tableColumns} dataSource={projects} pagination={paginationProp} loading={loading} />
+    <CreateModal editId={editId} visible={modalVisible} onClose={afterCreate} />
     </>
   )
 }

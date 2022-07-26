@@ -82,7 +82,7 @@ function CreateUser(props: ICreateUserProps) {
   }
   return (
     <Modal
-      title="新建账户"
+      title={`${isEdit ? '修改' : '新建'}账户`}
       visible={visible}
       okText={isEdit ? '修改' : '创建'}
       cancelText="取消"
