@@ -1,48 +1,48 @@
-$span: (8px, 16px 24px);
+$span: (8, 16, 24);
 
 @each $v in $span {
   // margin class
-  .m-t {
-    margin-top: $v;
+  .m-t-#{$v} {
+    margin-top: #{$v}px;
   }
-  .m-b {
-    margin-bottom: $v;
+  .m-b-#{$v} {
+    margin-bottom: #{$v}px;
   }
-  .m-l {
-    margin-left: $v;
+  .m-l-#{$v} {
+    margin-left: #{$v}px;
   }
-  .m-r {
-    margin-right: $v;
+  .m-r-#{$v} {
+    margin-right: #{$v}px;
   }
-  .m-x {
-    margin-left: $v;
-    margin-right: $v;
+  .m-x-#{$v} {
+    margin-left: #{$v}px;
+    margin-right: #{$v}px;
   }
-  .m-y {
-    margin-top: $v;
-    margin-bottom: $v;
+  .m-y-#{$v} {
+    margin-top: #{$v}px;
+    margin-bottom: #{$v}px;
   }
   
   // padding class
-  .p-t {
-    padding-top: $v;
+  .p-t-#{$v} {
+    padding-top: #{$v}px;
   }
-  .p-b {
-    padding-bottom: $v;
+  .p-b-#{$v} {
+    padding-bottom: #{$v}px;
   }
-  .p-l {
-    padding-left: $v;
+  .p-l-#{$v} {
+    padding-left: #{$v}px;
   }
-  .p-r {
-    padding-right: $v;
+  .p-r-#{$v} {
+    padding-right: #{$v}px;
   }
-  .p-x {
-    padding-left: $v;
-    padding-right: $v;
+  .p-x-#{$v} {
+    padding-left: #{$v}px;
+    padding-right: #{$v}px;
   }
-  .p-y {
-    padding-top: $v;
-    padding-bottom: $v;
+  .p-y-#{$v} {
+    padding-top: #{$v}px;
+    padding-bottom: #{$v}px;
   }
 }
 

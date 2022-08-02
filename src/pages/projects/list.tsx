@@ -105,7 +105,7 @@ function ProjectsPage() {
         <Button type="primary" htmlType="submit">查找</Button>
       </Form.Item>
     </Form>
-    <div className="flex-x-end m-y">
+    <div className="flex-x-end m-y-8">
       <Button type="default" htmlType="button" onClick={() => setModalVisible(true)}>新建项目</Button>
     </div>
     <Table rowKey="id" columns={tableColumns} dataSource={projects} pagination={paginationProp} loading={loading} />

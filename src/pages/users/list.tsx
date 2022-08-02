@@ -117,7 +117,7 @@ function UserListPage() {
       </Form>
       <div className="flex-x-end">
         <Button
-          className="m-y"
+          className="m-y-8"
           type="default"
           htmlType="button"
           onClick={() => setShowCreateModal(true)}
