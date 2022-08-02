@@ -1,6 +1,6 @@
 import { message } from "antd";
 import { useState } from "react";
-import { ICreateParams, IGetProjectsCreatedByCurrentParams, IProjectItem, IUpdateParams } from "../types/projects";
+import { ICreateParams, IGetProjectsCreatedByCurrentParams, IProjectItem, IUpdateParams, IUserProjectItem } from "../types/projects";
 import { IPaginationResponse } from "../types/request";
 import { delet, get, patch, post } from "../utils/request";
 
@@ -80,4 +80,16 @@ export function useGetProject() {
     project,
     requestProject
   }
+}
+
+export function getProjectUsers(id: number) {
+  return get<IUserProjectItem[]>('/api/projects/' + id + '/users');
+}
+
+export function updateProjectUsers(id: number, params: IUserProjectItem) {
+  return post<boolean>('/api/projects/' + id + '/users', params)
+}
+
+export function removeProjectUsers(id: number, mapId: number) {
+  return delet<boolean>('/api/projects/' + id + '/users/' + mapId);
 }

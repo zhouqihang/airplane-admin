@@ -4,6 +4,7 @@ import { EProjectStatus, IProjectItem } from '../../types/projects';
 import { statusLabel } from './constants';
 import { removeProject, updateProject, useGetProjectsCreatedByCurrent } from '../../apis/projects';
 import CreateModal from './create';
+import UsersModal from './users';
 
 function ProjectsPage() {
   const tableColumns = [
@@ -19,6 +20,7 @@ function ProjectsPage() {
         return (
           <Space size="middle">
             <a onClick={() => toggleStatus(record.id, record.status)}>{statusLabel[getDstatus(record.status)]}</a>
+            <a onClick={() => setUserModalId(record.id)}>人员配置</a>
             <a onClick={() => removeHandler(record.id)}>删除</a>
             <a onClick={() => openEditModal(record.id)}>修改信息</a>
           </Space>
@@ -36,6 +38,7 @@ function ProjectsPage() {
   }
   const [modalVisible, setModalVisible] = useState(false);
   const [editId, setEditId] = useState<number>();
+  const [userModalId, setUserModalId] = useState<number>();
 
   useEffect(function () {
     searchHandler();
@@ -107,6 +110,7 @@ function ProjectsPage() {
     </div>
     <Table rowKey="id" columns={tableColumns} dataSource={projects} pagination={paginationProp} loading={loading} />
     <CreateModal editId={editId} visible={modalVisible} onClose={afterCreate} />
+    <UsersModal projectId={userModalId} onClose={() => setUserModalId(undefined)} />
     </>
   )
 }

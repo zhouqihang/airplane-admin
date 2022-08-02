@@ -90,3 +90,7 @@ export function useGetUser() {
     requestUser
   }
 }
+
+export function getUsersCreatedByMyself() {
+  return get<IUsersItem[]>('/api/users/self');
+}

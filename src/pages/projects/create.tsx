@@ -16,6 +16,16 @@ function CreateModal(props: ICreateModalProps) {
   const initialValues = { status: 1 };
   const { loading: editLoading, project, requestProject } = useGetProject();
 
+  const rules = {
+    name: [
+      { required: true },
+      { max: 60 }
+    ],
+    desc: [
+      { max: 256 }
+    ]
+  }
+
   useEffect(function () {
     if (props.editId) {
       requestProject(props.editId);
@@ -70,10 +80,10 @@ function CreateModal(props: ICreateModalProps) {
     >
       <Spin spinning={editLoading}>
       <Form form={form} initialValues={initialValues} labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
-        <Form.Item label="项目名称" name="name">
+        <Form.Item label="项目名称" name="name" rules={rules.name}>
           <Input />
         </Form.Item>
-        <Form.Item label="项目简介" name="desc">
+        <Form.Item label="项目简介" name="desc" rules={rules.desc}>
           <Input.TextArea />
         </Form.Item>
         <Form.Item label="账号状态" name="status">

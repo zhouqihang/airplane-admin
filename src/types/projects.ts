@@ -1,4 +1,5 @@
 import { IPagination } from "./request";
+import { ERole } from "./role";
 
 export enum EProjectStatus {
   enabled = 1,
@@ -18,3 +19,10 @@ export type ICreateParams = Pick<IProjectItem, 'name' | 'desc' | 'status'>;
 export type IUpdateParams = Partial<Pick<IProjectItem, 'name' | 'desc' | 'status'>>;
 
 export type IGetProjectsCreatedByCurrentParams = IPagination & Partial<Pick<IProjectItem, 'name' | 'desc' | 'status'>>
+
+export interface IUserProjectItem {
+  id: number;
+  userId: number;
+  projectId: number;
+  role: ERole;
+}
