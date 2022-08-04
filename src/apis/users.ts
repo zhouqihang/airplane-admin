@@ -52,7 +52,7 @@ export function removeUser(id: number) {
 }
 
 export function getCurrentUserInfo() {
-  return get<IUsersItem>('/api/users/self');
+  return get<IUsersItem>('/api/account');
 }
 
 export function useCurrentUser() {

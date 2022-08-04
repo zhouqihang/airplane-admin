@@ -1,5 +1,5 @@
 import { message } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ICreateParams, IGetProjectsCreatedByCurrentParams, IProjectItem, IUpdateParams, IUserProjectItem } from "../types/projects";
 import { IPaginationResponse } from "../types/request";
 import { delet, get, patch, post } from "../utils/request";
@@ -92,4 +92,19 @@ export function updateProjectUsers(id: number, params: IUserProjectItem) {
 
 export function removeProjectUsers(id: number, mapId: number) {
   return delet<boolean>('/api/projects/' + id + '/users/' + mapId);
+}
+
+export function getProjectsIncludesMyself() {
+  return get<IProjectItem[]>('/api/projects/self');
+}
+
+export function useGetProjectsIncludesMyself() {
+  const [projects, setProjects] = useState<IProjectItem[]>([]);
+  useEffect(function () {
+    getProjectsIncludesMyself().then(res => {
+      setProjects(res.data);
+    })
+  }, [])
+
+  return projects;
 }
