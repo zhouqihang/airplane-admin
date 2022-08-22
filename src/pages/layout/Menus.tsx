@@ -1,24 +1,35 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Menu } from 'antd';
 import { ItemType,  } from 'antd/lib/menu/hooks/useItems';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import { useMenu } from '../../hooks/useMenu';
 import { useNavigate } from 'react-router-dom';
+import globalStateContext from '../../utils/global-state-context';
 
-const menuItems: ItemType[] = [
-  {
-    label: '用户管理',
-    key: '/users',
-  },
-  {
-    label: '项目管理',
-    key: '/projects'
-  }
-]
+function getMenuItems(projectId?: number) {
+  const menuItems: ItemType[] = [
+    {
+      label: '用户管理',
+      key: '/users',
+    },
+    {
+      label: '项目管理',
+      key: '/projects'
+    },
+  ] 
+  if (!projectId) return menuItems;
+  return menuItems.concat(
+    {
+      label: '菜单管理',
+      key: `/${projectId}/menus`
+    }
+  )
+}
 
 function Menus() {
   const { selectedKeys, toggleSelectedKeys } = useMenu();
   const navigate = useNavigate();
+  const globalState = useContext(globalStateContext);
 
   function selectMenuHandler({ key }: MenuInfo) {
     toggleSelectedKeys(key);
@@ -26,7 +37,7 @@ function Menus() {
   }
 
   return (
-    <Menu items={menuItems} selectedKeys={selectedKeys} onClick={selectMenuHandler} />
+    <Menu items={getMenuItems(globalState.projectId)} selectedKeys={selectedKeys} onClick={selectMenuHandler} />
   )
 }
 

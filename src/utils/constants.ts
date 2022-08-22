@@ -1,0 +1,1 @@
+export const SESSION_STORAGE_PROJECT_KEY = 'airplane_project_id';

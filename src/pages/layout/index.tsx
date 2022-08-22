@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Card, Dropdown, Layout, Menu, Modal } from 'antd';
 import Menus from './Menus';
@@ -9,25 +9,22 @@ import { useGetProjectsIncludesMyself } from '../../apis/projects';
 import { useState } from 'react';
 import { IProjectItem } from '../../types/projects';
 import { CheckCircleOutlined } from '@ant-design/icons';
+import globalStateContext from '../../utils/global-state-context';
+import { SESSION_STORAGE_PROJECT_KEY } from '../../utils/constants';
 
 const { Sider, Header, Content } = Layout;
 
 function LayoutPage() {
 
+  const globalState = useContext(globalStateContext);
   const user = useCurrentUser();
   const projects = useGetProjectsIncludesMyself();
+  const currentPoj = projects.find(item => item.id === globalState.projectId);
 
-  const [currentPoj, setCurrentPoj] = useState<IProjectItem>();
   const [projectModalVisible, setProjectModalVisible] = useState(false);
   useEffect(function () {
-    if (!currentPoj) {
-      const cache = sessionStorage.getItem('airplane_project');
-      if (cache) {
-        setCurrentPoj(JSON.parse(cache));
-      }
-      else {
-        setProjectModalVisible(true);
-      }
+    if (!globalState.projectId) {
+      setProjectModalVisible(true);
     }
   }, [])
 
@@ -41,9 +38,9 @@ function LayoutPage() {
   )
 
   function checkProject(project: IProjectItem) {
-    setCurrentPoj(project);
+    globalState.setGlobalState({ projectId: project.id });
     setProjectModalVisible(false);
-    sessionStorage.setItem('airplane_project', JSON.stringify(project));
+    sessionStorage.setItem(SESSION_STORAGE_PROJECT_KEY, '' + project.id);
   }
 
   return (
