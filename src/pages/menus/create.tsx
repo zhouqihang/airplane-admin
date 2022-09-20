@@ -42,7 +42,7 @@ function CreateModal(props: ICreateModal) {
 
   async function requestParentMenu() {
     try {
-      const res = await findAllMenus(parseInt(projectId || '', 10));
+      const res = await findAllMenus(parseInt(projectId || '', 10), { belongsTo: -1 });
       setParentMenus(res.data);
     }
     catch (err) {

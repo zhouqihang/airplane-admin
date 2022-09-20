@@ -21,4 +21,7 @@ export type IUpdateParams = Partial<Pick<IMenuItem, 'title' | 'parentMenu' | 'qu
 
 export type ICreateParams = Pick<IMenuItem, 'title' | 'routerName' | 'query'> & Partial<Pick<IMenuItem, 'parentMenu' | 'status'>>;
 
-export type IFindAllParams = Pick<IMenuItem, 'status'>;
+export interface IFindAllParams {
+  belongsTo?: number;
+  status?: IMenuItem['status'];
+};

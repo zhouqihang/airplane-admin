@@ -6,6 +6,7 @@ import Login from './pages/login';
 import Users from './pages/users/list';
 import Projects from './pages/projects/list';
 import Menus from './pages/menus/list';
+import Pages from './pages/pages/list';
 import { SESSION_STORAGE_PROJECT_KEY } from './utils/constants';
 import 'antd/dist/antd.css';
 import './assets/styles/common.scss';
@@ -21,7 +22,8 @@ function App() {
   });
 
   const subMenus = globalState.projectId ? [
-    <Route path=":projectId/menus" key="menus" element={<Menus />} />
+    <Route path=":projectId/menus" key="menus" element={<Menus />} />,
+    <Route path=":projectId/pages" key="pages" element={<Pages />} />,
   ] : [];
 
   return (
