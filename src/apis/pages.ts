@@ -23,6 +23,10 @@ export function removePage(projectId: number | string, pageId: number) {
   return delet<boolean>(`/api/projects/${projectId}/pages/${pageId}`);
 }
 
+export function getAllPages(projectId: number | string) {
+  return get<IPageItem[]>(`/api/projects/${projectId}/pages/all`);
+}
+
 export function useGetOnePage() {
   const [page, setPage] = useState<IPageItem>();
   const [loading, setLoading] = useState(false);

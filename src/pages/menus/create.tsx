@@ -2,8 +2,10 @@ import { Form, Input, message, Modal, Radio, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { createMenu, findAllMenus, findOne, updateMenu } from '../../apis/menus';
+import { getAllPages } from '../../apis/pages';
 import { EStatus } from '../../types/enum';
 import { IMenuItem } from '../../types/menus';
+import { IPageItem } from '../../types/pages';
 import { statusLabel } from '../users/constants';
 
 interface ICreateModal {
@@ -17,6 +19,7 @@ function CreateModal(props: ICreateModal) {
   const { projectId } = useParams();
   const [submitLoading, setSubmitLoading] = useState(false);
   const [parentMenus, setParentMenus] = useState<IMenuItem[]>([]);
+  const [pages, setPages] = useState<IPageItem[]>([]);
 
   const initFormValue = {
     parentMenu: -1,
@@ -25,6 +28,7 @@ function CreateModal(props: ICreateModal) {
 
   useEffect(function () {
     requestParentMenu()
+    getPages();
   }, [])
   useEffect(function () {
     if (!props.editId) return;
@@ -33,12 +37,18 @@ function CreateModal(props: ICreateModal) {
         form.setFieldsValue({
           title: res.data.title,
           routerName: res.data.routerName,
-          query: JSON.stringify(res.data.query),
+          query: res.data.query ? JSON.stringify(res.data.query) : '',
           parentMenu: res.data.parentMenu,
+          pageId: res.data.page?.id,
           status: res.data.status,
         })
       })
   }, [props.editId])
+  useEffect(function() {
+    if (!props.visible) {
+      form.resetFields();
+    }
+  }, [props.visible])
 
   async function requestParentMenu() {
     try {
@@ -55,6 +65,9 @@ function CreateModal(props: ICreateModal) {
     try {
       await form.validateFields();
       const value = form.getFieldsValue();
+      if (!value.query) {
+        value.query = null;
+      }
       if (props.editId) {
         await updateMenu(props.editId, parseInt(projectId || '', 10), value);
       }
@@ -70,6 +83,14 @@ function CreateModal(props: ICreateModal) {
     finally {
       setSubmitLoading(false);
     }
+  }
+
+  async function getPages() {
+    try {
+      const res = await getAllPages(projectId as string);
+      setPages(res.data);
+    }
+    catch (err) {}
   }
 
   return (
@@ -99,6 +120,15 @@ function CreateModal(props: ICreateModal) {
               parentMenus.map(item => (
                 <Select.Option value={item.id} key={item.id}>{item.title}</Select.Option>
               ))
+            }
+          </Select>
+        </Form.Item>
+        <Form.Item label="关联页面" name="pageId">
+          <Select>
+            {
+              pages.map(page => {
+                return (<Select.Option value={page.id}>{page.pageName}</Select.Option>)
+              })
             }
           </Select>
         </Form.Item>

@@ -1,4 +1,5 @@
 import { EStatus } from "./enum";
+import { IPageItem } from "./pages";
 import { IPagination, IPaginationResponse } from "./request";
 
 export interface IMenuItem {
@@ -8,6 +9,7 @@ export interface IMenuItem {
   /** menu query json string */
   query: string;
   status: EStatus;
+  page: IPageItem;
   parentMenu: number;
   createTime: string;
   updateTime: string;
