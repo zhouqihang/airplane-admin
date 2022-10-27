@@ -1,0 +1,16 @@
+.hoc-editor-container {
+  background-color: #fff;
+}
+.hoc-editor-container_border {
+  padding: 1px;
+  box-sizing: border-box;
+  overflow: hidden;
+  &.active {
+    background: repeating-linear-gradient(135deg, transparent, transparent 3px, #FF5722 3px, #FF5722 8px);
+    animation: shine 1s infinite linear;
+  }
+}
+@keyframes shine {
+  0% { background-position: -1px -1px;}
+  100% { background-position: -12px -12px;}
+}

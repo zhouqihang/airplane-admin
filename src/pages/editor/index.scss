@@ -1,0 +1,26 @@
+.editor {
+  max-width: 100vw;
+  min-width: 1366px;
+  height: 100vh;
+  min-height: 768px;
+  display: flex;
+  flex-direction: column;
+  &-main {
+    flex: 1;
+    display: flex;
+  }
+  &-playground {
+    flex: 1;
+  }
+  &-config {
+    width: 260px;
+    &__empty {
+      text-align: center;
+      padding: 24px 0;
+      p {
+        color: #999;
+        margin-top: 16px;
+      }
+    }
+  }
+}

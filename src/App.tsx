@@ -7,6 +7,7 @@ import Users from './pages/users/list';
 import Projects from './pages/projects/list';
 import Menus from './pages/menus/list';
 import Pages from './pages/pages/list';
+import PageEditor from './pages/editor';
 import { SESSION_STORAGE_PROJECT_KEY } from './utils/constants';
 import 'antd/dist/antd.css';
 import './assets/styles/common.scss';
@@ -35,6 +36,7 @@ function App() {
             <Route path="projects" element={<Projects />} />
             {subMenus}
           </Route>
+          <Route path=":projectId/pages/:pageId" element={<PageEditor />} />
           <Route path="/login" element={<Login />} />
         </Routes>
       </BrowserRouter>

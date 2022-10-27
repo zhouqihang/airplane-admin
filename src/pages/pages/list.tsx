@@ -3,7 +3,7 @@ import { Button, Form, Input, message, Radio, Select, Space, Table } from 'antd'
 import { EStatus } from '../../types/enum';
 import { statusLabel } from '../users/constants';
 import { removePage, updatePages, useFindByPage } from '../../apis/pages';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { IPageItem } from '../../types/pages';
 import CreatePage from './create';
 import { findAllMenus } from '../../apis/menus';
@@ -45,7 +45,8 @@ function Pages() {
         return (
           <Space size="middle">
             <a onClick={() => showEditModal(record.id)}>修改基础信息</a>
-            <a>编辑</a>
+            <Link to={`/${params.projectId}/pages/${record.id}`}>编辑</Link>
+            {/* <a>编辑</a> */}
             <a>构建历史</a>
             <a onClick={() => toggleStatus(record.id, record.status)}>{statusLabel[getDstatus(record.status)]}</a>
             <a onClick={() => handleRemove(record.id)}>删除</a>

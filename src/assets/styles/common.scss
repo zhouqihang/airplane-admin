@@ -45,6 +45,12 @@ $span: (8, 16, 24);
     padding-bottom: #{$v}px;
   }
 }
+.m-l-auto {
+  margin-left: auto;
+}
+.m-r-auto {
+  margin-right: auto;
+}
 
 .flex-center {
   display: flex;
