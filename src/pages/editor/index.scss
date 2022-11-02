@@ -11,9 +11,11 @@
   }
   &-playground {
     flex: 1;
+    padding: 0 24px;
   }
   &-config {
     width: 260px;
+    padding: 0 16px;
     &__empty {
       text-align: center;
       padding: 24px 0;

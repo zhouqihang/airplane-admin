@@ -5,6 +5,7 @@ import { ReactComponent as EmptySVG } from '../../assets/images/want-empty.svg';
 interface IConfigProps {
   type: componentTypeKeys;
   activeId?: string | number;
+  onPropsChange: (props: any) => void;
 }
 
 export default function Config(props: IConfigProps) {
@@ -20,7 +21,7 @@ export default function Config(props: IConfigProps) {
   }
   return (
     <div className="editor-config">
-      {props.activeId ? <Component /> : renderEmpyt()}
+      {props.activeId ? <Component onChange={props.onPropsChange} /> : renderEmpyt()}
     </div>
   )
 }

@@ -26,22 +26,3 @@ export const editorContext = createContext<{
   }
 });
 
-export interface IComponentTableChild {
-  name: string;
-  type: componentTypeKeys;
-}
-interface IComponentTable {
-  groupName: string;
-  children: IComponentTableChild[];
-}
-export const componentTable: IComponentTable[] = [
-  {
-    groupName: '容器组件',
-    children: [
-      {
-        name: '容器',
-        type: 'container',
-      }
-    ]
-  }
-]

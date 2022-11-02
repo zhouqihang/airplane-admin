@@ -36,6 +36,13 @@ function PageEditor() {
     setEditorState({ ...editorState });
   }
 
+  function updateProps(props: any) {
+    const parent = cache.get(editorState.currentActiveComponentId);
+    if (!parent) return;
+    parent.props = props;
+    setEditorState({ ...editorState });
+  }
+
   return (
     <editorContext.Provider value={{ editorState, setEditorState }}>
       <div className="editor">
@@ -43,7 +50,11 @@ function PageEditor() {
         <div className="editor-main">
           <EditorComponents onAdd={addComponent}/>
           <EditorPlayground />
-          <EditorConfig type={cache.get(editorState.currentActiveComponentId).type} activeId={editorState.currentActiveComponentId} />
+          <EditorConfig
+            type={cache.get(editorState.currentActiveComponentId).type}
+            activeId={editorState.currentActiveComponentId}
+            onPropsChange={updateProps}
+          />
         </div>
       </div>
     </editorContext.Provider>

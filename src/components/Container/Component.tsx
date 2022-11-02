@@ -1,4 +1,5 @@
 import React from 'react';
+import './index.scss';
 
 export interface IContainerProps {
   children?: React.ReactNode;
@@ -6,7 +7,7 @@ export interface IContainerProps {
 
 export default function ContainerComponent(props: IContainerProps) {
   return (
-    <div>
+    <div className="com-container" {...props}>
       container component
       {props.children}
     </div>
