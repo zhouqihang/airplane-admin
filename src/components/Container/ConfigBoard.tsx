@@ -9,7 +9,12 @@ interface IContainerConfigBoardProps {
 }
 
 export default function ContainerConfigBoard(props: IContainerConfigBoardProps) {
-  const { cssState, style, generateSetFunc, getStyleObject, bindValue } = useCssEditor();
+  const { cssState, style, generateSetFunc, getStyleObject, bindValue } = useCssEditor({
+    padding: '24px',
+    margin: '24px 0',
+    borderRadius: '4px',
+    backgroundColor: '#fff',
+  });
 
   useEffect(function () {
     props.onChange({ style });
@@ -19,10 +24,10 @@ export default function ContainerConfigBoard(props: IContainerConfigBoardProps) 
         <Tabs.TabPane tab="样式" key="style">
           <Form>
             <Form.Item label="内边距">
-              {bindValue(<Input placeholder="例：24px" defaultValue="24px" />)({event: 'onChange', field: 'padding'})}
+              {bindValue(<Input placeholder="例：24px" />)({event: 'onChange', field: 'padding'})}
             </Form.Item>
             <Form.Item label="外边距">
-              {bindValue(<Input placeholder="例：24px" defaultValue="24px" />)({event: 'onChange', field: 'margin'})}
+              {bindValue(<Input placeholder="例：24px" />)({event: 'onChange', field: 'margin'})}
             </Form.Item>
             <Form.Item label="背景色">
               {bindValue(<ColorPicker />)({event: 'onChange', field: 'backgroundColor'})}

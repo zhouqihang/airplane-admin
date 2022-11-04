@@ -61,7 +61,6 @@ export default function useCssEditor(defaultValue?: stateType) {
       }
       if (options.event === 'onChangeWithValue') {
         onChangeEvent = (value: unknown) => {
-          console.log("🚀 ~ file: useCssEditor.ts ~ line 70 ~ value", value)
           setCssState(Object.assign({}, cssState, options.field ? {
             [options.field]: value
           } : value))

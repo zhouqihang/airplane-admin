@@ -4,7 +4,7 @@ import ColorPicker from '../ColorPicker';
 
 interface IBorderPicker {
   onChange?: (value: string) => void;
-  defaultValue?: string;
+  value?: string;
 }
 
 const borderStyles = [
@@ -19,19 +19,41 @@ const borderStyles = [
 ];
 
 export default function BorderPicker(props: IBorderPicker) {
-  const [hasBorder, setHasBorder] = useState(false);
-  const [config, setConfig] = useState({
-    borderWidth: 0,
-    borderColor: '',
-    borderStyle: 'solid'
-  })
+  const [hasBorder, setHasBorder] = useState(() => {
+    return getDefaultConfFromProps().hasBorder
+  });
+  const [borderWidth, setBorderWidth] = useState(() => {
+    return getDefaultConfFromProps().borderWidth
+  });
+  const [borderColor, setBorderColor] = useState(() => {
+    return getDefaultConfFromProps().borderColor
+  });
+  const [borderStyle, setBorderStyle] = useState(() => {
+    return getDefaultConfFromProps().borderStyle
+  });
+
+  useEffect(function () {
+    if (!props.value) {
+      return setHasBorder(false);
+    }
+
+    const [width, style, color] = props.value.split(' ');
+    setBorderWidth(parseInt(width, 10));
+    setBorderColor(color);
+    setBorderStyle(style);
+    setHasBorder(true);
+  }, [props.value])
 
   useEffect(function () {
     changeHandler();
-  }, [config, hasBorder]);
+  }, [borderWidth, borderColor, borderStyle, hasBorder]);
 
-  function changeConfig(key: keyof typeof config, value: unknown) {
-    setConfig({ ...config, [key]: value});
+  function getDefaultConfFromProps() {
+    if (!props.value) {
+      return { hasBorder: false, borderWidth: 0, borderColor: '', borderStyle: '' }
+    }
+    const [width, style, color] = props.value.split(' ');
+    return { hasBorder: true, borderWidth: parseInt(width, 10), borderColor: color, borderStyle: style }
   }
 
   function changeHandler() {
@@ -42,10 +64,10 @@ export default function BorderPicker(props: IBorderPicker) {
     if (!hasBorder) {
       return '';
     }
-    if (!config.borderWidth) {
+    if (!borderWidth) {
       return '';
     }
-    return `${config.borderWidth}px ${config.borderStyle} ${config.borderColor || 'transparent'}`;
+    return `${borderWidth}px ${borderStyle} ${borderColor || 'transparent'}`;
   }
 
   function renderBorderConfig() {
@@ -57,20 +79,20 @@ export default function BorderPicker(props: IBorderPicker) {
               min={0}
               defaultValue={0}
               addonAfter="px"
-              value={config.borderWidth}
-              onChange={(value) => changeConfig('borderWidth', value)}
+              value={borderWidth}
+              onChange={setBorderWidth}
             />
           </Space>
           <Space>
             <span>边框颜色</span>
             <ColorPicker
-              defaultValue={config.borderColor}
-              onChange={(event) => changeConfig('borderColor', event.target.value)}
+              value={borderColor}
+              onChange={(event) => setBorderColor(event.target.value)}
             ></ColorPicker>
           </Space>
           <Space>
             <span>边框样式</span>
-            <Select defaultValue={config.borderStyle} value={config.borderStyle} onChange={(event) => changeConfig('borderStyle', event)}>
+            <Select defaultValue={borderStyle} value={borderStyle} onChange={setBorderStyle}>
               {
                 borderStyles.map((item) => {
                   return <Select.Option value={item} key={item}>{item}</Select.Option>
