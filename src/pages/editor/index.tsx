@@ -19,28 +19,52 @@ function PageEditor() {
     currentActiveComponentId: 'root',
     tree: [root]
   });
-  const cache = new Map();
-  cache.set('root', root);
+  const [cache, setCache] = useState<Record<string, ITreeItem>>({
+    root
+  });
 
+  /**
+   * 添加组件
+   * @param type 
+   * @returns 
+   */
   function addComponent(type: componentTypeKeys) {
-    const parent = cache.get(editorState.currentActiveComponentId);
+    const parent = cache[editorState.currentActiveComponentId];
     if (!parent) return;
     const item = {
-      componentId: Date.now(),
+      componentId: Date.now().toString(),
       type,
       props: {},
       children: []
     }
     parent.children.push(item)
-    cache.set(item.componentId, item);
+    setCache({
+      ...cache,
+      [item.componentId]: item
+    })
     setEditorState({ ...editorState });
   }
 
+  /**
+   * 更新组件props
+   * @param props 
+   * @returns 
+   */
   function updateProps(props: any) {
-    const parent = cache.get(editorState.currentActiveComponentId);
+    const parent = cache[editorState.currentActiveComponentId];
     if (!parent) return;
     parent.props = props;
     setEditorState({ ...editorState });
+  }
+
+  /**
+   * 点击playground中的组件
+   */
+  function componentActiveHandler(componentId: string) {
+    setEditorState({
+      ...editorState,
+      currentActiveComponentId: componentId
+    })
   }
 
   return (
@@ -49,9 +73,9 @@ function PageEditor() {
         <EditorHeader></EditorHeader>
         <div className="editor-main">
           <EditorComponents onAdd={addComponent}/>
-          <EditorPlayground />
+          <EditorPlayground onComponentActive={componentActiveHandler} />
           <EditorConfig
-            type={cache.get(editorState.currentActiveComponentId).type}
+            type={cache[editorState.currentActiveComponentId].type}
             activeId={editorState.currentActiveComponentId}
             onPropsChange={updateProps}
           />

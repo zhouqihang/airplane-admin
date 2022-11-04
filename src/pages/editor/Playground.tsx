@@ -2,7 +2,11 @@ import React, { useContext } from 'react';
 import { editorContext, ITreeItem } from './editorContext';
 import componentMap from './componentMap';
 
-export default function Playground() {
+interface IPlaygroundProps {
+  onComponentActive: (componentId: string) => void;
+}
+
+export default function Playground(props: IPlaygroundProps) {
   const { editorState } = useContext(editorContext);
 
   function renderChildren(tree: ITreeItem[]) {
@@ -15,8 +19,18 @@ export default function Playground() {
       )
     })
   }
+  function playgroundClickHandler(event: React.MouseEvent<HTMLElement>) {
+    let node: HTMLElement | null = event.target as HTMLElement;
+    while (node) {
+      if (node.dataset && node.dataset.componentId) {
+        props.onComponentActive(node.dataset.componentId);
+        break;
+      }
+      node = node.parentNode as HTMLElement;
+    }
+  }
   return (
-    <div className="editor-playground">
+    <div className="editor-playground" onClick={playgroundClickHandler}>
       {
         renderChildren(editorState.tree)
       }

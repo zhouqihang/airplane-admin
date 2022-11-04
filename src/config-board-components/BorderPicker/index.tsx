@@ -70,7 +70,6 @@ export default function BorderPicker(props: IBorderPicker) {
           </Space>
           <Space>
             <span>边框样式</span>
-            {/* <InputNumber min={0} defaultValue={0} addonAfter="px" value={config.borderStyle} /> */}
             <Select defaultValue={config.borderStyle} value={config.borderStyle} onChange={(event) => changeConfig('borderStyle', event)}>
               {
                 borderStyles.map((item) => {
