@@ -19,42 +19,21 @@ const borderStyles = [
 ];
 
 export default function BorderPicker(props: IBorderPicker) {
-  const [hasBorder, setHasBorder] = useState(() => {
-    return getDefaultConfFromProps().hasBorder
-  });
-  const [borderWidth, setBorderWidth] = useState(() => {
-    return getDefaultConfFromProps().borderWidth
-  });
-  const [borderColor, setBorderColor] = useState(() => {
-    return getDefaultConfFromProps().borderColor
-  });
-  const [borderStyle, setBorderStyle] = useState(() => {
-    return getDefaultConfFromProps().borderStyle
-  });
+  let defaultValue = { hasBorder: false, borderWidth: 0, borderColor: '', borderStyle: '' };
+  if (props.value) {
+    const [width, style, ...colors] = props.value.split(' ');
+    defaultValue = { hasBorder: true, borderWidth: parseInt(width, 10), borderColor: colors.join(' '), borderStyle: style }
+  }
 
-  useEffect(function () {
-    if (!props.value) {
-      return setHasBorder(false);
-    }
+  const [hasBorder, setHasBorder] = useState(defaultValue.hasBorder);
+  const [borderWidth, setBorderWidth] = useState(defaultValue.borderWidth);
+  const [borderColor, setBorderColor] = useState(defaultValue.borderColor);
+  const [borderStyle, setBorderStyle] = useState(defaultValue.borderStyle);
 
-    const [width, style, color] = props.value.split(' ');
-    setBorderWidth(parseInt(width, 10));
-    setBorderColor(color);
-    setBorderStyle(style);
-    setHasBorder(true);
-  }, [props.value])
 
   useEffect(function () {
     changeHandler();
   }, [borderWidth, borderColor, borderStyle, hasBorder]);
-
-  function getDefaultConfFromProps() {
-    if (!props.value) {
-      return { hasBorder: false, borderWidth: 0, borderColor: '', borderStyle: '' }
-    }
-    const [width, style, color] = props.value.split(' ');
-    return { hasBorder: true, borderWidth: parseInt(width, 10), borderColor: color, borderStyle: style }
-  }
 
   function changeHandler() {
     props.onChange && props.onChange(dispatch());
@@ -79,20 +58,20 @@ export default function BorderPicker(props: IBorderPicker) {
               min={0}
               defaultValue={0}
               addonAfter="px"
-              value={borderWidth}
+              value={defaultValue.borderWidth}
               onChange={setBorderWidth}
             />
           </Space>
           <Space>
             <span>边框颜色</span>
             <ColorPicker
-              value={borderColor}
+              value={defaultValue.borderColor}
               onChange={(event) => setBorderColor(event.target.value)}
             ></ColorPicker>
           </Space>
           <Space>
             <span>边框样式</span>
-            <Select defaultValue={borderStyle} value={borderStyle} onChange={setBorderStyle}>
+            <Select value={defaultValue.borderStyle} onChange={setBorderStyle}>
               {
                 borderStyles.map((item) => {
                   return <Select.Option value={item} key={item}>{item}</Select.Option>

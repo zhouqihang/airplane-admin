@@ -8,48 +8,23 @@ interface IColorPickerProps {
 }
 
 export default function ColorPicker(props: IColorPickerProps) {
-  const [type, setType] = useState<EColorPickerType>(() => {
-    if (!props.value) return EColorPickerType.none;
-    if (props.value.includes('#')) return EColorPickerType.color16;
-    if (/^(rgba|RGBA)\((.*)\)$/.test(props.value)) return EColorPickerType.rgba;
-    return EColorPickerType.none;
-  });
-  const [color16, setColor16] = useState(() => {
-    if (props.value) {
-      return props.value.replace('#', '');
-    }
-    return '';
-  });
-  const [RGBA_R, setRGBA_R] = useState(getRGBAFromProps()[0]);
-  const [RGBA_G, setRGBA_G] = useState(getRGBAFromProps()[1]);
-  const [RGBA_B, setRGBA_B] = useState(getRGBAFromProps()[2]);
-  const [RGBA_A, setRGBA_A] = useState(getRGBAFromProps()[3]);
-
-  /**
-   * 将默认颜色值字符串转换成state
-   */
-  useEffect(function () {
-    if (!props.value) {
-      return setType(EColorPickerType.none);
-    }
-    if (props.value.includes('#')) {
-      setType(EColorPickerType.color16);
-      setColor16(props.value.replace('#', ''));
-      return;
-    }
-
-    if (/^(rgba|RGBA)\((.*)\)$/.test(props.value)) {
-      const matcher = props.value.match(/^(rgba|RGBA)\((.*)\)$/);
-      if (!matcher || matcher.length === 0) return;
-      const [r, g, b, a] = matcher[2].split(',');
-      setType(EColorPickerType.rgba);
-      setRGBA_A(parseFloat(a));
-      setRGBA_R(parseInt(r, 10));
-      setRGBA_G(parseInt(g, 10));
-      setRGBA_B(parseInt(b, 10));
-      return;
-    }
-  }, [props.value])
+  // 根据props计算值
+  let colorType = EColorPickerType.none;
+  let defaultColor16 = '';
+  if (props.value?.includes('#')) {
+    colorType = EColorPickerType.color16;
+    defaultColor16 = props.value.replace('#', '');
+  }
+  if (/^(rgba|RGBA)\((.*)\)$/.test(props.value || '')) {
+    colorType = EColorPickerType.rgba;
+  }
+  const [r, g, b, a] = getRGBAFromProps();
+  const [type, setType] = useState<EColorPickerType>(colorType);
+  const [color16, setColor16] = useState(defaultColor16);
+  const [RGBA_R, setRGBA_R] = useState(r);
+  const [RGBA_G, setRGBA_G] = useState(g);
+  const [RGBA_B, setRGBA_B] = useState(b);
+  const [RGBA_A, setRGBA_A] = useState(a);
 
   useEffect(function () {
     formatColor()
@@ -88,10 +63,10 @@ export default function ColorPicker(props: IColorPickerProps) {
   function renderRGBA() {
     return (
       <Space direction="vertical">
-        <InputNumber min={0} max={255} addonBefore="R" defaultValue={0} onChange={setRGBA_R} value={RGBA_R} />
-        <InputNumber min={0} max={255} addonBefore="G" defaultValue={0} onChange={setRGBA_G} value={RGBA_G} />
-        <InputNumber min={0} max={255} addonBefore="B" defaultValue={0} onChange={setRGBA_B} value={RGBA_B} />
-        <InputNumber min={0} max={1} step={0.1} precision={1} addonBefore="A" onChange={setRGBA_A} value={RGBA_A} />
+        <InputNumber min={0} max={255} addonBefore="R" defaultValue={0} onChange={setRGBA_R} value={r} />
+        <InputNumber min={0} max={255} addonBefore="G" defaultValue={0} onChange={setRGBA_G} value={g} />
+        <InputNumber min={0} max={255} addonBefore="B" defaultValue={0} onChange={setRGBA_B} value={b} />
+        <InputNumber min={0} max={1} step={0.1} precision={1} addonBefore="A" onChange={setRGBA_A} value={a} />
       </Space>
     )
   }

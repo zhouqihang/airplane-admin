@@ -19,11 +19,11 @@ export default function ContainerConfigBoard(props: IContainerConfigBoardProps) 
     ...props.propConfig?.style
   });
 
-  useEffect(function () {
-    if (props.propConfig?.style) {
-      updateCssState(props.propConfig.style);
-    }
-  }, [])
+  // useEffect(function () {
+  //   if (props.propConfig?.style) {
+  //     updateCssState(props.propConfig.style);
+  //   }
+  // }, [])
 
   useEffect(function () {
     props.onChange({ style });
