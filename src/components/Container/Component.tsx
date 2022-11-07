@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { HTMLAttributes } from 'react';
 import './index.scss';
 
-export interface IContainerProps {
+export interface IContainerProps extends HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
 }
 

@@ -77,6 +77,7 @@ function PageEditor() {
           <EditorConfig
             type={cache[editorState.currentActiveComponentId].type}
             activeId={editorState.currentActiveComponentId}
+            activeProps={cache[editorState.currentActiveComponentId].props}
             onPropsChange={updateProps}
           />
         </div>

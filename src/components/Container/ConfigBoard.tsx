@@ -3,18 +3,27 @@ import { Form, Input, InputNumber, Tabs } from 'antd';
 import useCssEditor from '../../hooks/useCssEditor';
 import ColorPicker from '../../config-board-components/ColorPicker';
 import BorderPicker from '../../config-board-components/BorderPicker';
+import { IContainerProps } from './Component';
 
 interface IContainerConfigBoardProps {
   onChange: (props: any) => void;
+  propConfig?: IContainerProps;
 }
 
 export default function ContainerConfigBoard(props: IContainerConfigBoardProps) {
-  const { cssState, style, generateSetFunc, getStyleObject, bindValue } = useCssEditor({
+  const { style, bindValue, updateCssState } = useCssEditor({
     padding: '24px',
     margin: '24px 0',
     borderRadius: '4px',
     backgroundColor: '#fff',
+    ...props.propConfig?.style
   });
+
+  useEffect(function () {
+    if (props.propConfig?.style) {
+      updateCssState(props.propConfig.style);
+    }
+  }, [])
 
   useEffect(function () {
     props.onChange({ style });

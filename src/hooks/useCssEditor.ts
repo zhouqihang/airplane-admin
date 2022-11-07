@@ -40,15 +40,6 @@ export default function useCssEditor(defaultValue?: stateType) {
     return computedStyle;
   }
 
-  function generateSetFunc(key: keyof stateType) {
-    return function (val: unknown) {
-      setCssState({
-        ...cssState,
-        [key]: val
-      })
-    }
-  }
-
   function bindValue(node: React.ReactElement) {
     return function (options: IBindVaueParams) {
       let onChangeEvent = null;
@@ -73,7 +64,14 @@ export default function useCssEditor(defaultValue?: stateType) {
     }
   }
 
-  return { cssState, style, generateSetFunc, getStyleObject, bindValue };
+  function updateCssState(state?: stateType) {
+    setCssState({
+      ...cssState,
+      ...state
+    })
+  }
+
+  return { style, getStyleObject, bindValue, updateCssState };
 }
 
 function assignValid<T>(obj: T, key: keyof T, value: any) {

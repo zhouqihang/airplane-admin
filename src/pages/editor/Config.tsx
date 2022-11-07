@@ -1,11 +1,12 @@
 import React from 'react';
 import componentMap, { componentTypeKeys } from './componentMap';
 import { ReactComponent as EmptySVG } from '../../assets/images/want-empty.svg';
-
+import { ITreeItem } from './editorContext';
 interface IConfigProps {
   type: componentTypeKeys;
   activeId?: string | number;
   onPropsChange: (props: any) => void;
+  activeProps?: ITreeItem['props'];
 }
 
 export default function Config(props: IConfigProps) {
@@ -21,7 +22,7 @@ export default function Config(props: IConfigProps) {
   }
   return (
     <div className="editor-config">
-      {props.activeId ? <Component onChange={props.onPropsChange} /> : renderEmpyt()}
+      {props.activeId ? <Component onChange={props.onPropsChange} propConfig={props.activeProps} /> : renderEmpyt()}
     </div>
   )
 }

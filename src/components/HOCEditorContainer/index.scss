@@ -3,9 +3,9 @@
 }
 .hoc-editor-container_border {
   box-sizing: border-box;
-  
+  padding: 5px;
+  border: 1px solid transparent;
   &.active {
-    padding: 5px;
     border: 1px solid #40a9ff;
     transition: all .15s;
   }
