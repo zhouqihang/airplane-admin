@@ -5,15 +5,11 @@ import EditorPlayground from './Playground';
 import EditorConfig from './Config';
 import { editorContext, ITreeItem } from './editorContext';
 import './index.scss';
-import { componentTypeKeys } from './componentMap';
+import componentMap, { componentTypeKeys } from './componentMap';
 
-const root: ITreeItem = {
-  componentId: 'root',
-  type: 'container',
-  props: {},
-  children: []
-}
 function PageEditor() {
+
+  const root: ITreeItem = createComponent('container', 'root');
 
   const [editorState, setEditorState] = useState({
     currentActiveComponentId: 'root',
@@ -31,18 +27,22 @@ function PageEditor() {
   function addComponent(type: componentTypeKeys) {
     const parent = cache[editorState.currentActiveComponentId];
     if (!parent) return;
-    const item = {
-      componentId: Date.now().toString(),
-      type,
-      props: {},
-      children: []
-    }
+    const item = createComponent(type);
     parent.children.push(item)
     setCache({
       ...cache,
       [item.componentId]: item
     })
     setEditorState({ ...editorState });
+  }
+
+  function createComponent(type: componentTypeKeys, id = Date.now().toString()) {
+    return {
+      componentId: id,
+      type,
+      props: componentMap[type].defaultProps,
+      children: []
+    }
   }
 
   /**

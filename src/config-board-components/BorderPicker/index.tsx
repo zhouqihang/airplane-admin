@@ -1,10 +1,18 @@
-import { Form, InputNumber, Radio, Space, Select } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { Form, InputNumber, Radio, Space, Select, RadioChangeEvent } from 'antd';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import usePropsChange from '../../hooks/usePropsChange';
 import ColorPicker from '../ColorPicker';
 
 interface IBorderPicker {
   onChange?: (value: string) => void;
   value?: string;
+}
+
+interface IBorderState {
+  hasBorder: boolean;
+  borderWidth: number;
+  borderColor: string;
+  borderStyle: string;
 }
 
 const borderStyles = [
@@ -19,34 +27,49 @@ const borderStyles = [
 ];
 
 export default function BorderPicker(props: IBorderPicker) {
-  let defaultValue = { hasBorder: false, borderWidth: 0, borderColor: '', borderStyle: '' };
-  if (props.value) {
-    const [width, style, ...colors] = props.value.split(' ');
-    defaultValue = { hasBorder: true, borderWidth: parseInt(width, 10), borderColor: colors.join(' '), borderStyle: style }
-  }
+  const callbackGetConfigFromProps = useCallback<() => IBorderState>(function () {
+    let defaultValue = { hasBorder: false, borderWidth: 0, borderColor: '', borderStyle: '' };
+    if (props.value) {
+      const [width, style, ...colors] = props.value.split(' ');
+      defaultValue = { hasBorder: true, borderWidth: parseInt(width, 10), borderColor: colors.join(' '), borderStyle: style }
+    }
+    return defaultValue;
+  }, [props.value]);
+  const [border, setBorder] = useState<IBorderState>(callbackGetConfigFromProps())
 
-  const [hasBorder, setHasBorder] = useState(defaultValue.hasBorder);
-  const [borderWidth, setBorderWidth] = useState(defaultValue.borderWidth);
-  const [borderColor, setBorderColor] = useState(defaultValue.borderColor);
-  const [borderStyle, setBorderStyle] = useState(defaultValue.borderStyle);
+  const computedBorder = useMemo(function() {
+    if (!border.hasBorder) {
+      return '';
+    }
+    if (!border.borderWidth) {
+      return '';
+    }
+    return `${border.borderWidth}px ${border.borderStyle} ${border.borderColor}`;
+  }, [border])
 
+  usePropsChange(function () {
+    setBorder(callbackGetConfigFromProps());
+  }, props, ['value']);
 
   useEffect(function () {
-    changeHandler();
-  }, [borderWidth, borderColor, borderStyle, hasBorder]);
+    props.onChange && props.onChange(computedBorder);
+  }, [computedBorder]);
 
-  function changeHandler() {
-    props.onChange && props.onChange(dispatch());
-  }
-
-  function dispatch() {
-    if (!hasBorder) {
-      return '';
+  function updateBorder(key: keyof IBorderState) {
+    return function (event: unknown) {
+      if (event && typeof event === 'object') {
+        setBorder({
+          ...border,
+          [key]: (event as RadioChangeEvent).target.value
+        })
+      }
+      else {
+        setBorder({
+          ...border,
+          [key]: event
+        })
+      }
     }
-    if (!borderWidth) {
-      return '';
-    }
-    return `${borderWidth}px ${borderStyle} ${borderColor || 'transparent'}`;
   }
 
   function renderBorderConfig() {
@@ -58,20 +81,20 @@ export default function BorderPicker(props: IBorderPicker) {
               min={0}
               defaultValue={0}
               addonAfter="px"
-              value={defaultValue.borderWidth}
-              onChange={setBorderWidth}
+              value={border.borderWidth}
+              onChange={updateBorder('borderWidth')}
             />
           </Space>
           <Space>
             <span>边框颜色</span>
             <ColorPicker
-              value={defaultValue.borderColor}
-              onChange={(event) => setBorderColor(event.target.value)}
+              value={border.borderColor}
+              onChange={updateBorder('borderColor')}
             ></ColorPicker>
           </Space>
           <Space>
             <span>边框样式</span>
-            <Select value={defaultValue.borderStyle} onChange={setBorderStyle}>
+            <Select value={border.borderStyle} onChange={updateBorder('borderStyle')}>
               {
                 borderStyles.map((item) => {
                   return <Select.Option value={item} key={item}>{item}</Select.Option>
@@ -84,11 +107,11 @@ export default function BorderPicker(props: IBorderPicker) {
   }
   return (
     <>
-      <Radio.Group onChange={(e) => setHasBorder(e.target.value)} value={hasBorder}>
+      <Radio.Group onChange={updateBorder('hasBorder')} value={border.hasBorder}>
         <Radio value={false}>无</Radio>
         <Radio value={true}>有</Radio>
       </Radio.Group>
-      { hasBorder ? renderBorderConfig() : null }
+      { border.hasBorder ? renderBorderConfig() : null }
     </>
   )
 }
