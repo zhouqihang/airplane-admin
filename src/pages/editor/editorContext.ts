@@ -1,9 +1,10 @@
 import React, { createContext } from "react";
 import { IContainerProps } from "../../components/Container/Component";
 import { IHOCEditorContainerProps } from "../../components/HOCEditorContainer";
+import { ITableProps } from "../../components/Table/Component";
 import componentMap, { componentTypeKeys } from "./componentMap";
 
-export type componentPropTypes = IContainerProps
+export type componentPropTypes = IContainerProps &ITableProps;
 
 export interface ITreeItem {
   componentId: number | string;

@@ -5,7 +5,7 @@ import ContainerConfigBoard from "./ConfigBoard";
 const index = {
   Component: ContainerComponent,
   ConfigBoard: ContainerConfigBoard,
-  EditorComponent: HOCEditorContainer<IContainerProps>(ContainerComponent),
+  EditorComponent: HOCEditorContainer<IContainerProps>(ContainerComponent)({}),
   defaultProps: {
     style: {
       margin: '24px 0',

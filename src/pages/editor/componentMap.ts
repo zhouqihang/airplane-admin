@@ -1,4 +1,5 @@
 import Container from "../../components/Container";
+import Table from '../../components/Table';
 
 export interface IComponentTableChild {
   name: string;
@@ -24,13 +25,19 @@ export const componentTable: IComponentTable[] = [
   },
   {
     groupName: '数据显示组件',
-    children: []
+    children: [
+      {
+        name: '表格',
+        type: 'table'
+      }
+    ]
   }
 ]
 
 export type componentTypeKeys = keyof typeof componentMap;
 const componentMap = {
-  'container': Container
+  'container': Container,
+  'table': Table
 };
 
 

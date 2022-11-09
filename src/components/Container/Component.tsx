@@ -8,7 +8,6 @@ export interface IContainerProps extends HTMLAttributes<HTMLDivElement> {
 export default function ContainerComponent(props: IContainerProps) {
   return (
     <div className="com-container" {...props}>
-      container component
       {props.children}
     </div>
   )
