@@ -1,4 +1,5 @@
 import React from 'react';
+import { cns } from '../../utils/classnames';
 import './index.scss';
 
 export interface IHOCEditorContainerProps {
@@ -6,16 +7,30 @@ export interface IHOCEditorContainerProps {
   activeId?: string | number;
 }
 
+export interface IHOCEditorOptions<P> {
+  rewriteProps?: (props: P) => P;
+}
+
 export default function HOCEditorContainer<P>(Component: typeof React.Component | React.FC) {
-  return function (props: IHOCEditorContainerProps & P) {
-    const isActive = props.componentId === props.activeId;
-    const { componentId, activeId, ...others } = props;
-    return (
-      <div className={`hoc-editor-container_border ${isActive ? 'active' : ''}`} data-component-id={props.componentId}>
-        {/* <div className="hoc-editor-container"> */}
-          <Component {...others} />
-        {/* </div> */}
-      </div>
-    )
+  return function (options: IHOCEditorOptions<P>) {
+    return function (props: IHOCEditorContainerProps & P) {
+      const isActive = props.componentId === props.activeId;
+      const { componentId, activeId, ...others } = props;
+      const componentProps: any = options.rewriteProps ? options.rewriteProps(others as P) : others;
+
+      return (
+        <div
+          className={cns({
+            'hoc-editor-container_border': true,
+            active: isActive,
+          })}
+          data-component-id={props.componentId}
+        >
+          {/* <div className="hoc-editor-container"> */}
+            <Component {...componentProps} />
+          {/* </div> */}
+        </div>
+      )
+    }
   }
 }
