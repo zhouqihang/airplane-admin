@@ -3,6 +3,10 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+window.__AIRPLANE_ENV = {
+  IN_EDITOR: true
+}
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
