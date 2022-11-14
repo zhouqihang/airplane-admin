@@ -1,10 +1,8 @@
 import React, { CSSProperties } from 'react';
 import { Button, Form, Input, Space, Tabs } from 'antd';
-import ColorPicker from '../../config-board-components/ColorPicker';
-import BorderPicker from '../../config-board-components/BorderPicker';
 import { ITableProps } from './Component';
 import { ColumnType } from 'antd/lib/table';
-import { MinusCircleTwoTone, PlusOutlined, SearchOutlined } from '@ant-design/icons';
+import { MinusCircleTwoTone, PlusOutlined } from '@ant-design/icons';
 
 interface ITableConfigBoardProps {
   onChange: (props: ITableProps) => void;
