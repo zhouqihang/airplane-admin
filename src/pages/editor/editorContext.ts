@@ -4,12 +4,12 @@ import { IHOCEditorContainerProps } from "../../components/HOCEditorContainer";
 import { ITableProps } from "../../components/Table/Component";
 import componentMap, { componentTypeKeys } from "./componentMap";
 
-export type componentPropTypes = IContainerProps &ITableProps;
+export type componentPropTypes = IContainerProps | ITableProps;
 
 export interface ITreeItem {
   componentId: number | string;
   type: componentTypeKeys;
-  props: componentPropTypes & IHOCEditorContainerProps;
+  props: any;
   children: ITreeItem[];
 }
 

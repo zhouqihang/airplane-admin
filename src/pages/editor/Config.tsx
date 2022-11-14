@@ -6,7 +6,7 @@ interface IConfigProps {
   type: componentTypeKeys;
   activeId?: string | number;
   onPropsChange: (props: any) => void;
-  activeProps?: ITreeItem['props'];
+  activeProps: ITreeItem['props'];
 }
 
 export default function Config(props: IConfigProps) {

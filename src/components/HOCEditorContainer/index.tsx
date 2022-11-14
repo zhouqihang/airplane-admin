@@ -11,7 +11,7 @@ export interface IHOCEditorOptions<P> {
   rewriteProps?: (props: P) => P;
 }
 
-export default function HOCEditorContainer<P>(Component: typeof React.Component | React.FC) {
+export default function HOCEditorContainer<P>(Component: typeof React.Component | React.FC<P>) {
   return function (options: IHOCEditorOptions<P>) {
     return function (props: IHOCEditorContainerProps & P) {
       const isActive = props.componentId === props.activeId;

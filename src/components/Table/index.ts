@@ -19,7 +19,9 @@ const index = {
   }),
   defaultProps: {
     columns: [],
-    rowKey: 'id'
+    rowKey: 'id',
+    __datasource: 'json',
+    __JSONDatasource: '',
   }
 }
 

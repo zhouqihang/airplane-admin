@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { Button, Space, Modal, Input, message } from 'antd';
 import { editorContext } from './editorContext';
 import './header.scss';
@@ -15,6 +15,13 @@ function EditorHeader() {
   const [showVersionModal, setShowVersionModal] = useState(false);
   const [version, setVersion] = useState('');
   const [action, setAction] = useState<'none' | 'save' | 'publish'>('none')
+
+  const saveBtnText = useMemo(function () {
+    if (action === 'publish') {
+      return '保存并发布';
+    }
+    return '保存';
+  }, [action])
 
   async function openVersionModal() {
     // 查询当前最新版本
@@ -101,7 +108,8 @@ function EditorHeader() {
         visible={showVersionModal}
         onCancel={closeVersionModal}
         onOk={saveOrPublish}
-
+        okText={saveBtnText}
+        cancelText="取消"
       >
         <Input value={version} onChange={(event) => setVersion(event.target.value)} />
       </Modal>

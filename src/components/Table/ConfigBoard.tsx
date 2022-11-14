@@ -1,12 +1,13 @@
-import React, { CSSProperties } from 'react';
-import { Button, Form, Input, Space, Tabs } from 'antd';
+import React, { CSSProperties, useState } from 'react';
+import { Button, Form, Input, Radio, Space, Tabs } from 'antd';
 import { ITableProps } from './Component';
 import { ColumnType } from 'antd/lib/table';
 import { MinusCircleTwoTone, PlusOutlined } from '@ant-design/icons';
 
-interface ITableConfigBoardProps {
+
+export interface ITableConfigBoardProps {
   onChange: (props: ITableProps) => void;
-  propConfig?: ITableProps;
+  propConfig: ITableProps;
 }
 
 export default function TableConfigBoard(props: ITableConfigBoardProps) {
@@ -18,35 +19,32 @@ export default function TableConfigBoard(props: ITableConfigBoardProps) {
 
   function columnsChangeHandler(index: number, key: 'title' | 'dataIndex') {
     return function (event: React.ChangeEvent<HTMLInputElement>) {
-      props.onChange({
-        ...props.propConfig,
-        columns: props.propConfig?.columns?.map((column, columnIdx) => {
-          if (index === columnIdx) {
-            return { ...column, [key]: event.target.value }
-          }
-          return column;
-        })
-      })
+      updateProps('columns', props.propConfig?.columns?.map((column, columnIdx) => {
+        if (index === columnIdx) {
+          return { ...column, [key]: event.target.value }
+        }
+        return column;
+      }))
     }
   }
   function removeColumnItem(index: number) {
-    props.onChange({
-      ...props.propConfig,
-      columns: props.propConfig?.columns?.filter((column, columnIdx) => {
-        return columnIdx !== index;
-      })
-    })
+    updateProps('columns', props.propConfig?.columns?.filter((column, columnIdx) => {
+      return columnIdx !== index;
+    }))
   }
   function addColumns() {
+    updateProps('columns', [
+      ...props.propConfig?.columns || [],
+      {
+        title: '新增列',
+        dataIndex: 'new_column'
+      }
+    ])
+  }
+  function updateProps(key: keyof ITableProps, value: any) {
     props.onChange({
       ...props.propConfig,
-      columns: [
-        ...props.propConfig?.columns || [],
-        {
-          title: '新增列',
-          dataIndex: 'new_column'
-        }
-      ]
+      [key]: value
     })
   }
 
@@ -66,6 +64,22 @@ export default function TableConfigBoard(props: ITableConfigBoardProps) {
     })
   }
 
+  function renderJSONDatasource() {
+    return (
+      <Form.Item label="JSON数据">
+        <Input.TextArea value={props.propConfig.__JSONDatasource} onChange={(event) => updateProps('__JSONDatasource', event.target.value)} />
+      </Form.Item>
+    )
+  }
+
+  function renderAjaxDatasource() {
+    return (
+      <Form.Item label="API配置">
+        
+      </Form.Item>
+    )
+  }
+
   return (
       <Tabs>
         <Tabs.TabPane tab="样式" key="style">
@@ -73,7 +87,7 @@ export default function TableConfigBoard(props: ITableConfigBoardProps) {
         </Tabs.TabPane>
         <Tabs.TabPane tab="配置" key="setting">
           <Form labelCol={{ span: 6 }}>
-            <Form.Item label="表头配置：">
+            <Form.Item label="表头配置">
             </Form.Item>
             { renderColumns() }
             <Form.Item wrapperCol={{ span: 18, offset: 6 }}>
@@ -82,6 +96,13 @@ export default function TableConfigBoard(props: ITableConfigBoardProps) {
                 <Button block type="dashed" icon={<PlusOutlined />} onClick={addColumns}>添加操作列</Button>
               </Space>
             </Form.Item>
+            <Form.Item label="数据来源">
+              <Radio.Group onChange={(event) => updateProps('__datasource', event.target.value)} value={props.propConfig.__datasource}>
+                <Radio value="json">JSON</Radio>
+                <Radio value="ajax">API</Radio>
+              </Radio.Group>
+            </Form.Item>
+            {props.propConfig.__datasource === 'json' ? renderJSONDatasource() : renderAjaxDatasource()}
           </Form>
         </Tabs.TabPane>
       </Tabs>
