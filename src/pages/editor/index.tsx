@@ -27,6 +27,7 @@ function PageEditor() {
   function addComponent(type: componentTypeKeys) {
     const parent = cache[editorState.currentActiveComponentId];
     if (!parent) return;
+    if (!canAddToParent(parent.type, type)) return;
     const item = createComponent(type);
     parent.children.push(item)
     setCache({
@@ -34,15 +35,6 @@ function PageEditor() {
       [item.componentId]: item
     })
     setEditorState({ ...editorState });
-  }
-
-  function createComponent(type: componentTypeKeys, id = Date.now().toString()) {
-    return {
-      componentId: id,
-      type,
-      props: componentMap[type].defaultProps,
-      children: []
-    }
   }
 
   /**
@@ -87,3 +79,17 @@ function PageEditor() {
 }
 
 export default PageEditor;
+
+function createComponent(type: componentTypeKeys, id = Date.now().toString()) {
+  return {
+    componentId: id,
+    type,
+    props: componentMap[type].defaultProps,
+    children: []
+  }
+}
+
+function canAddToParent(parentType: componentTypeKeys, childType: componentTypeKeys) {
+  const contains = componentMap[parentType].contains;
+  return (contains as componentTypeKeys[]).includes(childType);
+}

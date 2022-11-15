@@ -22,7 +22,8 @@ const index = {
     rowKey: 'id',
     __datasource: 'json',
     __JSONDatasource: '',
-  }
+  },
+  contains: []
 }
 
 export default index;

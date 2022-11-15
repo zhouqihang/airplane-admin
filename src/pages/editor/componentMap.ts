@@ -1,5 +1,6 @@
 import Container from "../../components/Container";
 import Table from '../../components/Table';
+import Paragraph from '../../components/Paragraph';
 
 export interface IComponentTableChild {
   name: string;
@@ -31,13 +32,23 @@ export const componentTable: IComponentTable[] = [
         type: 'table'
       }
     ]
+  },
+  {
+    groupName: '文字和提示',
+    children: [
+      {
+        name: '段落',
+        type: 'paragraph'
+      }
+    ]
   }
 ]
 
 export type componentTypeKeys = keyof typeof componentMap;
 const componentMap = {
   'container': Container,
-  'table': Table
+  'table': Table,
+  'paragraph': Paragraph
 };
 
 

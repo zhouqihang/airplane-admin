@@ -13,7 +13,11 @@ const index = {
       backgroundColor: '#fff',
       borderRadius: '4px',
     }
-  }
+  },
+  contains: [
+    'table',
+    'paragraph'
+  ]
 };
 
 export default index;
