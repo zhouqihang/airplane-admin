@@ -1,10 +1,5 @@
 import React, { createContext } from "react";
-import { IContainerProps } from "../../components/Container/Component";
-import { IHOCEditorContainerProps } from "../../components/HOCEditorContainer";
-import { ITableProps } from "../../components/Table/Component";
-import componentMap, { componentTypeKeys } from "./componentMap";
-
-export type componentPropTypes = IContainerProps | ITableProps;
+import { componentTypeKeys } from "./componentMap";
 
 export interface ITreeItem {
   componentId: number | string;

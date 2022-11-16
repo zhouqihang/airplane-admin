@@ -16,7 +16,8 @@ const index = {
   },
   contains: [
     'table',
-    'paragraph'
+    'paragraph',
+    'title'
   ]
 };
 
