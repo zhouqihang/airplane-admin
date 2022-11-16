@@ -13,3 +13,9 @@ export interface IPageConfigItem {
 export interface ICreatePageConfigParams extends Pick<IPageConfigItem, "version" | "jsonConfig"> {
   pageId: number | string;
 }
+
+export interface IPageConfigDetail<T> extends Pick<IPageConfigItem, 'id' | 'version' | 'updateTime'> {
+  jsonConfig: {
+    components: T[]
+  };
+}

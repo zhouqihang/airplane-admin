@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import EditorHeader from './Header';
 import EditorComponents from './Components';
 import EditorPlayground from './Playground';
@@ -6,11 +6,14 @@ import EditorConfig from './Config';
 import { editorContext, ITreeItem } from './editorContext';
 import './index.scss';
 import componentMap, { componentTypeKeys } from './componentMap';
+import { getConfById } from '../../apis/pageConfig';
+import { useParams, useRoutes, useSearchParams } from 'react-router-dom';
 
 function PageEditor() {
 
   const root: ITreeItem = createComponent('container', 'root');
-
+  const params = useParams();
+  const [query] = useSearchParams();
   const [editorState, setEditorState] = useState({
     currentActiveComponentId: 'root',
     tree: [root]
@@ -18,6 +21,21 @@ function PageEditor() {
   const [cache, setCache] = useState<Record<string, ITreeItem>>({
     root
   });
+
+  /**
+   * 获取当前页面已有配置，并将配置组件化
+   */
+  useEffect(function () {
+    getConfById<ITreeItem>(params.projectId as string, params.pageId as string, query.get('confId') || '')
+      .then(res => {
+        if (!res.data) return;
+        setEditorState({
+          ...editorState,
+          tree: res.data.jsonConfig.components
+        })
+        setCache(initTreeCache(res.data.jsonConfig.components, {}))
+      })
+  }, [params.pageId, params.projectId, query])
 
   /**
    * 添加组件
@@ -80,6 +98,12 @@ function PageEditor() {
 
 export default PageEditor;
 
+/**
+ * 根据 type 生成一个组件配置结构
+ * @param type 
+ * @param id 
+ * @returns 
+ */
 function createComponent(type: componentTypeKeys, id = Date.now().toString()) {
   return {
     componentId: id,
@@ -89,7 +113,29 @@ function createComponent(type: componentTypeKeys, id = Date.now().toString()) {
   }
 }
 
+/**
+ * 判断一个组件是否能被添加到当前活跃组件
+ * @param parentType 
+ * @param childType 
+ * @returns 
+ */
 function canAddToParent(parentType: componentTypeKeys, childType: componentTypeKeys) {
   const contains = componentMap[parentType].contains;
   return (contains as componentTypeKeys[]).includes(childType);
+}
+
+/**
+ * 从已有配置生成cache
+ * @param tree 
+ * @param cache 
+ * @returns 
+ */
+function initTreeCache(tree: ITreeItem[], cache: Record<string, ITreeItem>) {
+  tree.forEach(item => {
+    cache[item.componentId] = item;
+    if (item.children && item.children.length) {
+      initTreeCache(item.children, cache);
+    }
+  })
+  return cache;
 }

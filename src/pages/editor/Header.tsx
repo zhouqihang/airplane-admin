@@ -66,6 +66,7 @@ function EditorHeader() {
         pageId: parseInt(params.pageId as string, 10)
       })
       if (action === 'save') {
+        message.success(`版本 ${version} 配置保存成功`)
         closeVersionModal();
       }
       else if (action === 'publish') {
