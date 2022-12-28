@@ -6,6 +6,8 @@ import { IUsersItem } from "./users";
 export interface IPageItem {
   id: number;
   pageName: string;
+  pageRouter: string;
+  pagePath: string;
   status: EStatus;
   updator: IUsersItem;
   menus: IMenuItem[];
@@ -15,9 +17,11 @@ export interface IPageItem {
 
 export type IPageListParams = IPagination & Partial<Pick<IPageItem, 'pageName' | 'status'>>;
 
-export type IUpdateParams = Partial<Pick<IPageItem, 'pageName' | 'status'>>
+export type IUpdateParams = Partial<Pick<IPageItem, 'pageName' | 'pageRouter' | 'pageName' | 'status'>>
 
 export interface ICreateParams {
   pageName: IPageItem['pageName'];
+  pageRouter: IPageItem['pageRouter'];
+  pagePath: IPageItem['pageName'];
   status: IPageItem['status'];
 }

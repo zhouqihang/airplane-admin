@@ -32,6 +32,8 @@ function CreatePage(props: ICreatePageProps) {
   useEffect(function () {
     form.setFieldsValue({
       pageName: page?.pageName,
+      pageRouter: page?.pageRouter,
+      pagePath: page?.pagePath,
       status: page?.status
     })
   }, [page])
@@ -67,6 +69,12 @@ function CreatePage(props: ICreatePageProps) {
     >
       <Form initialValues={initialValues} form={form}>
         <Form.Item label="页面名称" name="pageName">
+          <Input />
+        </Form.Item>
+        <Form.Item label="页面路由" name="pageRouter">
+          <Input />
+        </Form.Item>
+        <Form.Item label="页面路径" name="pagePath">
           <Input />
         </Form.Item>
         <Form.Item label="页面状态" name="status">
