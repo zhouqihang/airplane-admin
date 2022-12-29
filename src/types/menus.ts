@@ -7,7 +7,7 @@ export interface IMenuItem {
   title: string;
   routerName: string;
   /** menu query json string */
-  query: string;
+  query: Record<string, any>;
   status: EStatus;
   page: IPageItem;
   parentMenu: number;

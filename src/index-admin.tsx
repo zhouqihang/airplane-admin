@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './preview-sys';
+import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 window.__AIRPLANE_ENV = {
-  IN_EDITOR: false,
-  IS_PREVIEW: true,
+  IN_EDITOR: true,
+  IS_PREVIEW: false,
   IS_BUILDER: false
 }
 

@@ -1,3 +1,5 @@
+import { IMenuItem } from "./menus";
+import { IPageItem } from "./pages";
 import { IPagination } from "./request";
 import { ERole } from "./role";
 
@@ -25,4 +27,20 @@ export interface IUserProjectItem {
   userId: number;
   projectId: number;
   role: ERole;
+}
+
+interface IPageItemWithConfig extends IPageItem {
+  jsonConfig: {
+    components: any[];
+  }
+}
+export interface IProjectConf {
+  globalConfig: any;
+  apisConfig: any;
+  menusConfig: {
+    children: IMenuItem[];
+  },
+  pagesConfig: {
+    children: IPageItemWithConfig[];
+  }
 }

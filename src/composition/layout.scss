@@ -1,0 +1,9 @@
+.air-layout {
+  height: 100vh;
+  .air-content {
+    padding: 16px;
+  }
+  &__header {
+    background-color: #dfdfdf;
+  }
+}

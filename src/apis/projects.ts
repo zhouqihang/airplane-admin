@@ -1,6 +1,6 @@
 import { message } from "antd";
 import { useEffect, useState } from "react";
-import { ICreateParams, IGetProjectsCreatedByCurrentParams, IProjectItem, IUpdateParams, IUserProjectItem } from "../types/projects";
+import { ICreateParams, IGetProjectsCreatedByCurrentParams, IProjectConf, IProjectItem, IUpdateParams, IUserProjectItem } from "../types/projects";
 import { IPaginationResponse } from "../types/request";
 import { delet, get, patch, post } from "../utils/request";
 
@@ -107,4 +107,12 @@ export function useGetProjectsIncludesMyself() {
   }, [])
 
   return projects;
+}
+
+/**
+ * 获取指定project的所有配置
+ * @param id 
+ */
+export function getProjectConf(id: number) {
+  return get<IProjectConf>(`/api/projects/${id}/conf`);
 }

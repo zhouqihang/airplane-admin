@@ -9,7 +9,10 @@ import componentMap, { componentTypeKeys } from './componentMap';
 import { getConfById } from '../../apis/pageConfig';
 import { useParams, useRoutes, useSearchParams } from 'react-router-dom';
 
-function PageEditor() {
+interface IPageEditorProps {
+  tree?: ITreeItem[];
+}
+function PageEditor(props: IPageEditorProps) {
 
   const root: ITreeItem = createComponent('container', 'root');
   const params = useParams();
@@ -26,15 +29,21 @@ function PageEditor() {
    * 获取当前页面已有配置，并将配置组件化
    */
   useEffect(function () {
-    getConfById<ITreeItem>(params.projectId as string, params.pageId as string, query.get('confId') || '')
-      .then(res => {
-        if (!res.data) return;
-        setEditorState({
-          ...editorState,
-          tree: res.data.jsonConfig.components
-        })
-        setCache(initTreeCache(res.data.jsonConfig.components, {}))
+    let promise: Promise<ITreeItem[]>;
+    if (props.tree) {
+      promise = Promise.resolve(props.tree)
+    }
+    else {
+      promise = getConfById<ITreeItem>(params.projectId as string, params.pageId as string, query.get('confId') || '')
+        .then((res) => res.data.jsonConfig.components)
+    }
+    promise.then(res => {
+      setEditorState({
+        ...editorState,
+        tree: res
       })
+      setCache(initTreeCache(res, {}))
+    })
   }, [params.pageId, params.projectId, query])
 
   /**
