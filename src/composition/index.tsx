@@ -19,7 +19,7 @@ export default function Composition(props: ICompositionProps) {
     }
     return pages.map((page) => {
       return (
-        <Route path={page.pagePath} element={<PageRender tree={page.jsonConfig.components} />} />
+        <Route path={formatPath(page.pagePath)} element={<PageRender tree={page.jsonConfig.components} />} />
       )
     })
   }
@@ -32,10 +32,23 @@ export default function Composition(props: ICompositionProps) {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<CompositionLayout menus={props.config?.menusConfig.children} getPagePath={getPagePathByPageId} />}>
+        <Route path="/:projectId" element={<CompositionLayout menus={props.config?.menusConfig.children} getPagePath={getPagePathByPageId} />}>
           {renderPages()}
         </Route>
       </Routes>
     </BrowserRouter>
   )
+}
+
+/**
+ * 将页面路径前面的'/'删除
+ * eg: /path/sub -> path/sub
+ * @param path 
+ * @returns 
+ */
+function formatPath(path: string) {
+  if (path.startsWith('/')) {
+    return path.replace('/', '');
+  }
+  return path;
 }

@@ -1,7 +1,7 @@
+import React, { useMemo } from 'react';
 import { Layout, Menu } from 'antd';
 import { MenuInfo } from 'rc-menu/lib/interface';
-import React, { useMemo } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import { IMenuItem } from '../types/menus';
 import './layout.scss';
 
@@ -13,6 +13,7 @@ interface ICompisitionLayoutProps {
 }
 export default function CompositionLayout(props: ICompisitionLayoutProps) {
   const navigate = useNavigate();
+  const params = useParams();
   
   const menusItem = useMemo(function () {
     if (!props.menus) return [];
@@ -39,7 +40,7 @@ export default function CompositionLayout(props: ICompisitionLayoutProps) {
       const query = menu.query ? Object.keys(menu.query).map(key => {
         return `${key}=${menu.query[key]}`
       }).join('&') : '';
-      navigate(path + '?' + query);
+      navigate('/' + params.projectId + path + '?' + query);
     }
   }
 
