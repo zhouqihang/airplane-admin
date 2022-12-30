@@ -19,7 +19,7 @@ export default function Composition(props: ICompositionProps) {
     }
     return pages.map((page) => {
       return (
-        <Route path={formatPath(page.pagePath)} element={<PageRender tree={page.jsonConfig.components} />} />
+        <Route key={page.pageRouter} path={formatPath(page.pagePath)} element={<PageRender tree={page.jsonConfig.components} />} />
       )
     })
   }
