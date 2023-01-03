@@ -36,7 +36,6 @@ function CreateModal(props: ICreateModal) {
       .then(res => {
         form.setFieldsValue({
           title: res.data.title,
-          routerName: res.data.routerName,
           query: res.data.query ? JSON.stringify(res.data.query) : '',
           parentMenu: res.data.parentMenu,
           pageId: res.data.page?.id,
@@ -105,9 +104,6 @@ function CreateModal(props: ICreateModal) {
     >
       <Form form={form} initialValues={initFormValue} labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
         <Form.Item label="菜单名称" name="title">
-          <Input />
-        </Form.Item>
-        <Form.Item label="路由名" name="routerName">
           <Input />
         </Form.Item>
         <Form.Item label="路由参数" name="query">

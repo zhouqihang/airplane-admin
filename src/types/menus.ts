@@ -5,7 +5,6 @@ import { IPagination, IPaginationResponse } from "./request";
 export interface IMenuItem {
   id: number;
   title: string;
-  routerName: string;
   /** menu query json string */
   query: Record<string, any>;
   status: EStatus;
@@ -19,9 +18,9 @@ export type IGetMenuParams = IPagination & Partial<Pick<IMenuItem, 'title' | 'st
 
 export type IGetMenuResponse = IPaginationResponse<IMenuItem>;
 
-export type IUpdateParams = Partial<Pick<IMenuItem, 'title' | 'parentMenu' | 'query' | 'routerName' | 'status'>>
+export type IUpdateParams = Partial<Pick<IMenuItem, 'title' | 'parentMenu' | 'query' | 'status'>>
 
-export type ICreateParams = Pick<IMenuItem, 'title' | 'routerName' | 'query'> & Partial<Pick<IMenuItem, 'parentMenu' | 'status'>>;
+export type ICreateParams = Pick<IMenuItem, 'title' | 'query'> & Partial<Pick<IMenuItem, 'parentMenu' | 'status'>>;
 
 export interface IFindAllParams {
   belongsTo?: number;

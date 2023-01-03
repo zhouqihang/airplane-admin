@@ -18,7 +18,6 @@ function MenuList() {
   };
   const columns = [
     { title: '菜单名称', dataIndex: 'title', key: 'title' },
-    { title: '路由名', dataIndex: 'routerName', key: 'routerName' },
     { title: '状态', dataIndex: 'status', key: 'status', render: function (val: EStatus) {
       return statusLabel[val];
     } },
@@ -92,7 +91,7 @@ function MenuList() {
   }
   async function handleRemove(id: number) {
     try {
-      removeMenu(projectId as string, id);
+      await removeMenu(projectId as string, id);
       message.success('操作成功');
       searchHandler();
     }

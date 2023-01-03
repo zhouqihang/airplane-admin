@@ -24,7 +24,7 @@ instance.interceptors.response.use(function (response: IAxiosResponse<IResponse>
     }
 
     if (response.data.code === 4030) {
-      window.location.href = '/login';
+      return window.location.href = '/login';
     }
     response.config.showErrMsg && message.error(response.data.msg);
     return Promise.reject(new ResponseError(response.data.msg, response.data.code));
@@ -77,6 +77,7 @@ export function patch<T>(url: string, params: any = {}, config?: IAxiosRequestCo
 
 export function delet<T>(url: string, params: any = {}, config: IAxiosRequestConfig = {}) {
   return instance.delete<IResponse<T>>(url, {
+    showErrMsg: true,
     ...config,
     params: params
   })
