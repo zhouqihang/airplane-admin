@@ -24,3 +24,6 @@ yarn-error.log*
 
 # auto generate file
 /src/index.tsx
+
+# ide
+.idea
