@@ -1,0 +1,9 @@
+.api-page {
+  &__form {
+    overflow: hidden;
+    display: flex;
+    > div {
+      flex: 1;
+    }
+  }
+}

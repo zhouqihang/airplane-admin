@@ -26,6 +26,10 @@ function getMenuItems(projectId?: number) {
     {
       label: '页面管理',
       key: `/${projectId}/pages`
+    },
+    {
+      label: '接口管理',
+      key: `/${projectId}/apis`
     }
   )
 }

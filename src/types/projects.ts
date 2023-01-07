@@ -1,5 +1,6 @@
 import { IMenuItem } from "./menus";
 import { IPageItem } from "./pages";
+import { IProjectRequest } from "./projectRequests";
 import { IPagination } from "./request";
 import { ERole } from "./role";
 
@@ -13,6 +14,7 @@ export interface IProjectItem {
   name: string;
   desc: string;
   status: EProjectStatus;
+  projectRequest?: IProjectRequest;
   createTime: string;
   updateTime: string;
 }
